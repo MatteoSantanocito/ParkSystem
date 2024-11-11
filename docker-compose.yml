@@ -1,0 +1,77 @@
+version: '3.8'
+services:
+  auth_service:
+    build: ./auth_service
+    ports:
+      - "5000:80"
+    depends_on:
+      - db
+    environment:
+      - ConnectionStrings__DefaultConnection=Host=db;Database=amusement_park;Username=user;Password=password
+      - Jwt__Key=ChiaveSegretaSuperSicura123!
+
+  reservation_service:
+    build: ./reservation_service
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    environment:
+      - DATABASE_URL=postgresql://user:password@db/amusement_park
+      - RABBITMQ_USER=user
+      - RABBITMQ_PASSWORD=password
+      - RABBITMQ_HOST=rabbitmq
+      - WEATHER_API_KEY=YOUR_OPENWEATHERMAP_API_KEY
+      - CITY_ID=2525068  # Catania
+
+  notification_service:
+    build: ./notification_service
+    depends_on:
+      - rabbitmq
+    environment:
+      - RABBITMQ_USER=user
+      - RABBITMQ_PASSWORD=password
+      - RABBITMQ_HOST=rabbitmq
+      - SMTP_HOST=smtp.gmail.com
+      - SMTP_PORT=587
+      - SMTP_USER=tuo_email@gmail.com
+      - SMTP_PASSWORD=tua_password
+
+  api_gateway:
+    build: ./api_gateway
+    ports:
+      - "8080:8080"
+    depends_on:
+      - auth_service
+      - reservation_service
+
+  user_interface:
+    build: ./user_interface
+    ports:
+      - "5001:80"
+    depends_on:
+      - api_gateway
+      - auth_service
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"   # Porta per la comunicazione con l'applicazione
+      - "15672:15672" # Porta per l'interfaccia di management
+    environment:
+      RABBITMQ_DEFAULT_USER: user
+      RABBITMQ_DEFAULT_PASS: password
+
+  db:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: amusement_park
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+volumes:
+  db_data:
