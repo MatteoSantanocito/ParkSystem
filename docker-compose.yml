@@ -1,0 +1,24 @@
+version: '3.9'
+services:
+   #basta fare docker-compose up -d per creare il db automaticamente con le tabelle
+  db:
+    image: postgres:15
+    container_name: parksystem_db
+    environment:
+      POSTGRES_USER: parksys
+      POSTGRES_PASSWORD: system
+      POSTGRES_DB: parksystem_db
+    volumes:
+      # Monta la cartella 'db' del tuo progetto nella directory
+      # /docker-entrypoint-initdb.d del container.
+      # Tutti i .sql in questa cartella verranno eseguiti in ordine alfabetico
+      # alla prima inizializzazione del database.
+      - ./db:/docker-entrypoint-initdb.d
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U parksys -d parksystem_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: always
