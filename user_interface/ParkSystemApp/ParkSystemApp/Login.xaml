@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ParkSystemApp.Login"
+             Title="Login"
+             BackgroundColor="#D99B9B">
+
+
+    <VerticalStackLayout VerticalOptions="Center" >
+
+        <Image
+            Source="Logo1.PNG"
+            WidthRequest="100"
+            HeightRequest="100"
+            HorizontalOptions="Center"
+            Margin="0,5,0,0"/>
+
+        <Label
+            Text="Park System"
+            FontSize="Large"
+            HorizontalOptions="Center"
+            TextColor="White"
+            Margin="0,10,0,0"/>
+
+        <Entry
+            Placeholder="email"
+            TextColor="Black"
+            BackgroundColor="White"
+            Margin="40,50,40,10"
+            />
+
+        <Entry
+            Placeholder="password"
+            IsPassword="True"
+            TextColor="Black"
+            BackgroundColor="White"
+            Margin="40,0,40,10"
+            />
+
+        <Button
+            Text="Login"
+            BackgroundColor="Purple"
+            TextColor="White"
+            Margin="100,15,100,30"/>
+
+        <Label
+            Text="Non sei ancora Registrato?"
+            HorizontalOptions="Center"
+            TextColor="White"/>
+
+        <Button 
+            Text="Registrati"
+            HorizontalOptions="Center"
+            Clicked="Button_Clicked"/>
+
+        <Label x:Name="DescrizioneLabel"
+               FontSize="Small"
+               TextColor="Gray"/>
+
+    </VerticalStackLayout>
+        
+</ContentPage>

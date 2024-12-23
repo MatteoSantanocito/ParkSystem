@@ -1,0 +1,6 @@
+# Ignora la directory .vs specifica di Visual Studio
+.vs/
+
+# Ignora le directory di output della build
+**/obj/
+**/bin/
