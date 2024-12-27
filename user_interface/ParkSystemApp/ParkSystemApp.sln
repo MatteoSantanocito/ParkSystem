@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.12.35514.174 d17.12
+VisualStudioVersion = 17.12.35514.174
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParkSystemApp", "ParkSystemApp\ParkSystemApp.csproj", "{B7542087-1AB0-414F-AB8B-FB6A9F710E46}"
 EndProject
@@ -13,6 +13,7 @@ Global
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{B7542087-1AB0-414F-AB8B-FB6A9F710E46}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B7542087-1AB0-414F-AB8B-FB6A9F710E46}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B7542087-1AB0-414F-AB8B-FB6A9F710E46}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
 		{B7542087-1AB0-414F-AB8B-FB6A9F710E46}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B7542087-1AB0-414F-AB8B-FB6A9F710E46}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection

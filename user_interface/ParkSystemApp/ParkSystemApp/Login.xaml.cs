@@ -21,8 +21,9 @@ public partial class Login : ContentPage
 
     public async Task GetAttrazioneAsync()
     {
+        // Put in host localhost if you use IOS
         var connectionString = "Host=10.0.2.2;Port=5433;Database=parksystem_db;Username=parksys;Password=system";
-        /// Put in host localhost if you use IOS
+        
         await using var conn = new NpgsqlConnection(connectionString);
         await conn.OpenAsync();
 

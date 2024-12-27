@@ -13,6 +13,7 @@ namespace ParkSystemApp
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
+                    fonts.AddFont("SawarabiGothic-Regular.ttf", "SawarabiGothic");
                 });
 
 #if DEBUG

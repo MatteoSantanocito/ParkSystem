@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ParkSystemApp.AttrazionePage"
+             Title="AttrazionePage"
+             BackgroundColor="#D99B9B">
+
+
+
+    <VerticalStackLayout Padding="20">
+        <Label Text="{Binding Nome}"
+               FontSize="24"
+               HorizontalOptions="Center"/>
+        <Label Text="{Binding Descrizione}"
+               FontSize="16"
+               HorizontalOptions="Center"/>
+        <Label Text="{Binding Tipologia}"
+               FontSize="16"
+               HorizontalOptions="Center"/>
+        <Label Text="{Binding Tematica}"
+               FontSize="16"
+               HorizontalOptions="Center"/>
+        <Label Text="{Binding MinimumAge}"
+               FontSize="16"    
+               HorizontalOptions="Center"/>
+        <Label Text="{Binding State}"
+               FontSize="16"
+               HorizontalOptions="Center"/>
+        <Label Text="{Binding HourCapacity}"
+               FontSize="16"
+               HorizontalOptions="Center"/>
+        <Image Source="{Binding ImagePath}"
+               HorizontalOptions="Center"
+               HeightRequest="100"/>
+    </VerticalStackLayout>
+
+
+
+
+</ContentPage>
