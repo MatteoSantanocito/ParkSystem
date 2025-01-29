@@ -1,0 +1,9 @@
+database:
+  host: "db"  # Nome del servizio definito in docker-compose
+  port: 5432  # La porta interna del container
+  user: "parksys"
+  password: "system"
+  dbname: "parksystem_db"
+  sslmode: "disable"
+jwt:
+  secret: "supersegreto"
