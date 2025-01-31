@@ -3,6 +3,7 @@ package handlers
 import (
 	"database/sql"
 	"encoding/json"
+	"log"
 	"net/http"
 
 	"backend-go/models"
@@ -46,8 +47,9 @@ func LoginHandler(db *sql.DB, jwtSecret string) http.HandlerFunc {
 			return
 		}
 
-		user, err := models.GetUserByUsername(db, creds.Username)
+		user, err := models.GetUserByUsernamePassword(db, creds.Username, creds.Password)
 		if err != nil || !utils.CheckPasswordHash(creds.Password, user.Password) {
+			log.Printf("[DEBUG] Errore in GetUserByUsernamePassword: user=%v, pass=%v, err=%v\n", creds.Username, creds.Password, err)
 			http.Error(w, "Credenziali errate", http.StatusUnauthorized)
 			return
 		}
@@ -58,6 +60,7 @@ func LoginHandler(db *sql.DB, jwtSecret string) http.HandlerFunc {
 			return
 		}
 
+		// Risposta in formato JSON con il token
 		json.NewEncoder(w).Encode(map[string]string{"token": token})
 	}
 }

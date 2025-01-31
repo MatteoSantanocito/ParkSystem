@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="ParkSystemApp.Login"
              Title="Login"
-             BackgroundColor="#D99B9B">
+             BackgroundColor="#D99B9B"> 
 
 
     <VerticalStackLayout VerticalOptions="Center" >
@@ -23,6 +23,7 @@
             Margin="0,10,0,0"/>
 
         <Entry
+            x:Name="email"
             Placeholder="email"
             TextColor="Black"
             BackgroundColor="White"
@@ -30,6 +31,7 @@
             />
 
         <Entry
+            x:Name="passwordText"
             Placeholder="password"
             IsPassword="True"
             TextColor="Black"
@@ -41,7 +43,8 @@
             Text="Login"
             BackgroundColor="Purple"
             TextColor="White"
-            Margin="100,15,100,30"/>
+            Margin="100,15,100,30"
+            Clicked="Button_Login_Clicked"/>
 
         <Label
             Text="Non sei ancora Registrato?"

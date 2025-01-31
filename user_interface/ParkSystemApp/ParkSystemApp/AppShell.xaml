@@ -6,11 +6,17 @@
     xmlns:local="clr-namespace:ParkSystemApp"
     Shell.FlyoutBehavior="Flyout"
     Title="ParkSystemApp"
-    NavBarIsVisible="False">
+    NavBarIsVisible="False"
+    
+    >
 
     <ShellContent
-        Title="Home"
-        ContentTemplate="{DataTemplate local:MainPage}"
-        Route="MainPage" />
+        Title="Login"
+        ContentTemplate="{DataTemplate local:Login}"
+        Route="Login" />
+    <ShellContent
+        Title="Registrazione"
+        ContentTemplate="{DataTemplate local:Registrazione}"
+        Route="Registrazione" />
 
 </Shell>

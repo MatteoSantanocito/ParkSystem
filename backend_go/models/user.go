@@ -7,20 +7,21 @@ import (
 
 type User struct {
 	ID        int       `json:"id"`
-	Username  string    `json:"username"`
-	Password  string    `json:"-"`
+	Email     string    `json:"email"`
+	Password  string    `json:"password"`
 	CreatedAt time.Time `json:"created_at"`
 }
 
-func CreateUser(db *sql.DB, username, hashedPassword string) error {
-	_, err := db.Exec("INSERT INTO users (username, password) VALUES ($1, $2)", username, hashedPassword)
+func CreateUser(db *sql.DB, Email, hashedPassword string) error {
+	_, err := db.Exec("INSERT INTO utenti (email, password) VALUES ($1, $2)", Email, hashedPassword)
 	return err
 }
 
-func GetUserByUsername(db *sql.DB, username string) (*User, error) {
+// DA RISOLVERE
+func GetUserByUsernamePassword(db *sql.DB, Email string, Password string) (*User, error) {
 	var user User
-	err := db.QueryRow("SELECT id, username, password, created_at FROM users WHERE username = $1", username).
-		Scan(&user.ID, &user.Username, &user.Password, &user.CreatedAt)
+	err := db.QueryRow("SELECT email, password_hash FROM utenti WHERE email = $1 AND password_hash=$2 ", Email, Password).
+		Scan(&user.Email, &user.Password)
 	if err != nil {
 		return nil, err
 	}

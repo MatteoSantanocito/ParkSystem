@@ -1,30 +1,23 @@
 # Usa un'immagine di base con Go
-FROM golang:1.21 AS builder
+FROM golang:1.20-alpine
 
 # Imposta la directory di lavoro
 WORKDIR /app
 
-# Copia i file go.mod e go.sum e scarica le dipendenze
+# Copia i file go.mod e go.sum (dipendenze)
 COPY go.mod go.sum ./
+
+# Scarica le dipendenze
 RUN go mod download
 
-# Copia il codice sorgente
+# Copia tutto il resto del codice sorgente
 COPY . .
 
-# Compila l'applicazione
-RUN go build -o backend-go
+# Compila il tuo programma
+RUN go build -o backend_go
 
-# Crea un'immagine più leggera per l'esecuzione
-FROM alpine:latest
-
-# Imposta la directory di lavoro
-WORKDIR /root/
-
-# Copia l'eseguibile dal builder
-COPY --from=builder /app/backend-go .
-
-# Espone la porta (cambia se necessario)
+# Espone la porta 8080 (quella su cui gira la tua app Go)
 EXPOSE 8080
 
-# Comando di avvio
-CMD ["./backend-go"]
+# Comando di avvio del container
+CMD ["./backend_go"]
