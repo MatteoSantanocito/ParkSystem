@@ -16,18 +16,18 @@ namespace ParkSystemApp
 
         private async void Button_Login_Clicked(object sender, EventArgs e)
         {
-            
-            string username = email.Text;
+            System.Diagnostics.Debug.WriteLine($"emailEntry={emailEntry}, passwordText={passwordText}");
+            string email = emailEntry.Text;
             string password = passwordText.Text;
 
-            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
+            if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
             {
                 await DisplayAlert("Errore", "Compila tutti i campi", "OK");
                 return;
             }
 
             // Esegui la chiamata all'endpoint di login
-            var result = await _apiService.LoginAsync(username, password);
+            var result = await _apiService.LoginAsync(email, password);
 
             if (result.StartsWith("Errore"))
             {

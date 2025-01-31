@@ -1,6 +1,5 @@
 using System;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -14,20 +13,20 @@ namespace ParkSystemApp.Services
 
         public ApiService()
         {
-            // Cambia l'URL con l'indirizzo del tuo backend (API Gateway o simile)
+            // Cambia con il tuo IP/porta
             _httpClient = new HttpClient
             {
-                BaseAddress = new Uri("http://10.0.2.2:8080") // Esempio per emulatore Android
+                BaseAddress = new Uri("http://10.0.2.2:8080")
             };
         }
 
-        public async Task<string> LoginAsync(string username, string password)
+        public async Task<string> LoginAsync(string email, string password)
         {
             try
             {
                 var loginData = new
                 {
-                    Username = username,
+                    Email = email,
                     Password = password
                 };
 
@@ -37,7 +36,7 @@ namespace ParkSystemApp.Services
                     "application/json"
                 );
 
-                // Esempio: endpoint per login definito nel backend
+                // Esempio: endpoint /login definito nel backend Go
                 var response = await _httpClient.PostAsync("/login", content);
 
                 if (!response.IsSuccessStatusCode)
@@ -50,7 +49,7 @@ namespace ParkSystemApp.Services
                 var loginResponse = JsonSerializer.Deserialize<LoginResponse>(json);
 
                 // Se il token è presente, lo salviamo in SecureStorage
-                if (!string.IsNullOrEmpty(loginResponse.Token))
+                if (!string.IsNullOrEmpty(loginResponse?.Token))
                 {
                     await SecureStorage.SetAsync("AuthToken", loginResponse.Token);
                 }
@@ -59,7 +58,56 @@ namespace ParkSystemApp.Services
             }
             catch (Exception ex)
             {
-                // Qui catturiamo l'eccezione e logghiamo anche l’InnerException per una diagnosi più completa
+                var inner = ex.InnerException?.Message ?? "";
+                return $"Errore: {ex.Message} | InnerException: {inner}";
+            }
+        }
+
+        private class UserResponse
+        {
+            public int ID { get; set; }
+            public string Nome { get; set; }
+            public string Cognome { get; set; }
+            public string TipodiAvventura { get; set; }
+            public string Email { get; set; }
+            public string CodiceAmico { get; set; }
+        }
+
+       
+        public async Task<string> RegisterAsync(string nome, string cognome, string tipoAvventura, string email, string password)
+        {
+            try
+            {
+                var registerData = new
+                {
+                    Nome = nome,
+                    Cognome = cognome,
+                    tipo_avventura = tipoAvventura,
+                    Email = email,
+                    Password = password
+                };
+
+                var content = new StringContent(
+                    JsonSerializer.Serialize(registerData),
+                    Encoding.UTF8,
+                    "application/json"
+                );
+
+                
+                var response = await _httpClient.PostAsync("/register", content);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    var errorMessage = await response.Content.ReadAsStringAsync();
+                    return $"Errore: {errorMessage}";
+                }
+
+                // Se tutto ok, restituisco il messaggio di successo
+                var successMessage = await response.Content.ReadAsStringAsync();
+                return successMessage;
+            }
+            catch (Exception ex)
+            {
                 var inner = ex.InnerException?.Message ?? "";
                 return $"Errore: {ex.Message} | InnerException: {inner}";
             }
@@ -68,6 +116,7 @@ namespace ParkSystemApp.Services
         private class LoginResponse
         {
             public string Token { get; set; }
+            public UserResponse User { get; set; }
         }
     }
 }
