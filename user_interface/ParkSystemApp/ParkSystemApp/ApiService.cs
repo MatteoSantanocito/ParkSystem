@@ -45,16 +45,18 @@ namespace ParkSystemApp.Services
                     return $"Errore: {errorMessage}";
                 }
 
+
                 var json = await response.Content.ReadAsStringAsync();
                 var loginResponse = JsonSerializer.Deserialize<LoginResponse>(json);
 
-                // Se il token è presente, lo salviamo in SecureStorage
-                if (!string.IsNullOrEmpty(loginResponse?.Token))
-                {
-                    await SecureStorage.SetAsync("AuthToken", loginResponse.Token);
-                }
 
-                return loginResponse.Token;
+                // Se il token è presente, lo salviamo in SecureStorage
+                if (!string.IsNullOrEmpty(loginResponse?.token))
+                {
+                    await SecureStorage.SetAsync("AuthToken", loginResponse.token);
+                }
+                
+                return loginResponse.token;
             }
             catch (Exception ex)
             {
@@ -68,9 +70,12 @@ namespace ParkSystemApp.Services
             public int ID { get; set; }
             public string Nome { get; set; }
             public string Cognome { get; set; }
-            public string TipodiAvventura { get; set; }
             public string Email { get; set; }
+            public string Telefono { get; set; }
+            public string TipoUtente { get; set; }
             public string CodiceAmico { get; set; }
+            public string TipoAvventura { get; set; }
+            public DateTime DataRegistrazione { get; set; }
         }
 
        
@@ -115,8 +120,8 @@ namespace ParkSystemApp.Services
 
         private class LoginResponse
         {
-            public string Token { get; set; }
-            public UserResponse User { get; set; }
+            public string token { get; set; }
+            public UserResponse user { get; set; }
         }
     }
 }

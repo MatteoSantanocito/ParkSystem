@@ -16,7 +16,7 @@ namespace ParkSystemApp
 
         private async void Button_Login_Clicked(object sender, EventArgs e)
         {
-            System.Diagnostics.Debug.WriteLine($"emailEntry={emailEntry}, passwordText={passwordText}");
+            System.Diagnostics.Debug.WriteLine($"emailEntry={emailEntry.Text}, passwordText={passwordText.Text}");
             string email = emailEntry.Text;
             string password = passwordText.Text;
 
@@ -42,7 +42,7 @@ namespace ParkSystemApp
                     await DisplayAlert("Successo", "Login effettuato con successo", "OK");
 
                     // Se stai usando Shell, naviga alla MainPage
-                    await Shell.Current.GoToAsync("//Mainpage");
+                    await Shell.Current.GoToAsync(nameof(MainPage));
                 }
                 else
                 {
