@@ -31,5 +31,5 @@ services:
       DATABASE_USER: parksys
       DATABASE_PASSWORD: system
       DATABASE_NAME: parksystem_db
-      JWT_SECRET: supersegreto
+      JWT_SECRET: mysecretkey
     restart: always

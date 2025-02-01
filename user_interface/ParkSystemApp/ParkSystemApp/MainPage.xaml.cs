@@ -33,6 +33,7 @@ namespace ParkSystemApp
             await Shell.Current.GoToAsync(nameof(AttrazionePage), navigationParameters);
         }
 
+
         private async void CaricaDati()
         {
             /// Put in host localhost if you use IOS
@@ -72,6 +73,12 @@ namespace ParkSystemApp
                 await DisplayAlert("Errore", $"Non è stato possibile recuperare i dati: {ex.Message}", "OK");
             }
 
+        }
+
+        private async void OnProfileClicked(object sender, EventArgs e)
+        {
+            // Naviga alla pagina di registrazione
+            await Shell.Current.GoToAsync(nameof(Profilo));
         }
 
 

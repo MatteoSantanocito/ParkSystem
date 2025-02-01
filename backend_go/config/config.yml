@@ -6,4 +6,4 @@ database:
   dbname: "parksystem_db"
   sslmode: "disable"
 jwt:
-  secret: "supersegreto"
+  secret: "mysecretkey"

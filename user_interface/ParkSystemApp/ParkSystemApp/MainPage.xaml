@@ -32,12 +32,13 @@
                    TextColor="White"
                    FontFamily="SawarabiGothic"/>
 
-            <Image Source="profile_icon.png"
+            <ImageButton Source="profile_icon.png"
                    Grid.Column="2"
                    WidthRequest="50"
                    HeightRequest="50"
                    VerticalOptions="Center"
-                   HorizontalOptions="End" />
+                   HorizontalOptions="End"
+                   Clicked="OnProfileClicked" />
         </Grid>
 
         <!-- Corpo della pagina -->

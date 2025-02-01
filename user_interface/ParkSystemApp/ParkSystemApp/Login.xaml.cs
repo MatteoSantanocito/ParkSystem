@@ -15,41 +15,36 @@ namespace ParkSystemApp
         }
 
         private async void Button_Login_Clicked(object sender, EventArgs e)
-        {
-            System.Diagnostics.Debug.WriteLine($"emailEntry={emailEntry.Text}, passwordText={passwordText.Text}");
-            string email = emailEntry.Text;
-            string password = passwordText.Text;
-
-            if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
             {
-                await DisplayAlert("Errore", "Compila tutti i campi", "OK");
-                return;
-            }
+                // Debug
+                System.Diagnostics.Debug.WriteLine($"emailEntry={emailEntry.Text}, passwordText={passwordText.Text}");
+                
+                string email = emailEntry.Text;
+                string password = passwordText.Text;
 
-            // Esegui la chiamata all'endpoint di login
-            var result = await _apiService.LoginAsync(email, password);
-
-            if (result.StartsWith("Errore"))
-            {
-                // Se la stringa inizia con "Errore", mostriamo l'errore
-                await DisplayAlert("Errore", result, "OK");
-            }
-            else
-            {
-                if (!string.IsNullOrEmpty(result))
+                if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
                 {
-                    // Token ricevuto correttamente
-                    await DisplayAlert("Successo", "Login effettuato con successo", "OK");
+                    await DisplayAlert("Errore", "Compila tutti i campi", "OK");
+                    return;
+                }
 
-                    // Se stai usando Shell, naviga alla MainPage
-                    await Shell.Current.GoToAsync(nameof(MainPage));
-                }
-                else
+                // Esegui la chiamata all'endpoint di login
+                var result = await _apiService.LoginAsync(email, password);
+
+                // Se la stringa ritornata inizia con "Errore", mostriamo l'errore
+                if (result.StartsWith("Errore"))
                 {
-                    await DisplayAlert("Errore", "Token non ricevuto, login non riuscito", "OK");
+                    await DisplayAlert("Errore", result, "OK");
+                    return;
                 }
+
+                // Altrimenti significa che il login è riuscito e abbiamo un token
+                await DisplayAlert("Successo", "Login effettuato con successo", "OK");
+
+                // Navigazione usando rotta “assoluta” di Shell: //MainPage
+                await Shell.Current.GoToAsync($"//{nameof(MainPage)}");
             }
-        }
+
 
         private async void Button_Clicked(object sender, EventArgs e)
         {

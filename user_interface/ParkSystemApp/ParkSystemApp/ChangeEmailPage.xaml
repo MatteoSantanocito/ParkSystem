@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage 
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="ParkSystemApp.ChangeEmailPage"
+    Title="Cambia Email">
+
+    <VerticalStackLayout Margin="20">
+        <Label Text="Inserisci la nuova email"
+               FontAttributes="Bold"
+               FontSize="16" 
+               HorizontalOptions="Center" />
+
+        <Entry x:Name="NewEmailEntry"
+               Placeholder="Nuova Email" 
+               Keyboard="Email"
+               Margin="0,10,0,0" />
+
+        <Button Text="Salva"
+                Margin="0,20,0,0"
+                Clicked="OnSalvaClicked" />
+
+        <Button Text="Annulla"
+                Margin="0,10,0,0"
+                Clicked="OnAnnullaClicked" />
+    </VerticalStackLayout>
+</ContentPage>
