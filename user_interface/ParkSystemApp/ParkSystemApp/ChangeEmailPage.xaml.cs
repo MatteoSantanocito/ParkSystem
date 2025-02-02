@@ -23,6 +23,12 @@ namespace ParkSystemApp
                 return;
             }
 
+            bool conferma = await DisplayAlert("Conferma", "Sei sicuro di voler modificare la tua email?", "Si", "No");
+            if (!conferma)
+            {
+                return; // L'utente ha annullato l'operazione
+            }
+
             // Chiamata all’API
             var result = await _apiService.ChangeEmailAsync(newEmail);
 

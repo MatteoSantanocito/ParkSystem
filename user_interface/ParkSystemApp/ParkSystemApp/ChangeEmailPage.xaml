@@ -3,25 +3,70 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     x:Class="ParkSystemApp.ChangeEmailPage"
-    Title="Cambia Email">
+    Title="Cambia Email"
+    BackgroundColor="White">
 
-    <VerticalStackLayout Margin="20">
-        <Label Text="Inserisci la nuova email"
-               FontAttributes="Bold"
-               FontSize="16" 
-               HorizontalOptions="Center" />
+    <Grid RowDefinitions="Auto,*">
+        <!-- TOP BAR simile a quella del Profilo -->
+        <Border
+            Grid.Row="0"
+            BackgroundColor="#F4A7A3"
+            Padding="20"
+            HeightRequest="140"
+            HorizontalOptions="FillAndExpand"
+            VerticalOptions="Start">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="0,0,20,20" />
+            </Border.StrokeShape>
+            <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="Auto,*">
+                <!-- Bottone per tornare indietro (back) -->
+                <Button 
+                    Text="&#xe5c4;"
+                    FontFamily="MaterialIcons"
+                    FontSize="30"
+                    TextColor="Black"
+                    BackgroundColor="Transparent"
+                    HorizontalOptions="Start"
+                    VerticalOptions="Center"
+                    Margin="-20,-10,0,0"
+                    Clicked="OnAnnullaClicked"/>
+                <!-- Titolo della pagina -->
+                <Label
+                    Text="Cambia Email"
+                    Margin="10,20,0,0"
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    FontSize="25"
+                    FontAttributes="Bold"
+                    HorizontalOptions="Start"
+                    VerticalOptions="Center" />
+            </Grid>
+        </Border>
 
-        <Entry x:Name="NewEmailEntry"
-               Placeholder="Nuova Email" 
-               Keyboard="Email"
-               Margin="0,10,0,0" />
+        <!-- CONTENUTO -->
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Margin="20" Spacing="20">
+                <Frame BorderColor="#F4A7A3" CornerRadius="30" Padding="20">
+                    <VerticalStackLayout Spacing="20">
+                        <Label Text="Inserisci la nuova email"
+                               FontAttributes="Bold"
+                               FontSize="16" 
+                               HorizontalOptions="Center" />
 
-        <Button Text="Salva"
-                Margin="0,20,0,0"
-                Clicked="OnSalvaClicked" />
+                        <Entry x:Name="NewEmailEntry"
+                               Placeholder="Nuova Email" 
+                               Keyboard="Email"
+                               Margin="0,10,0,0" />
 
-        <Button Text="Annulla"
-                Margin="0,10,0,0"
-                Clicked="OnAnnullaClicked" />
-    </VerticalStackLayout>
+                        <Button Text="Cambia Email"
+                                Margin="0,10,0,0"
+                                TextColor="Black"
+                                BackgroundColor="#F4A7A3"
+                                Clicked="OnSalvaClicked" />
+                    </VerticalStackLayout>
+                </Frame>
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
 </ContentPage>
+

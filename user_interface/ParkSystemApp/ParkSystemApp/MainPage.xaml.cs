@@ -78,7 +78,7 @@ namespace ParkSystemApp
         private async void OnProfileClicked(object sender, EventArgs e)
         {
             // Naviga alla pagina di registrazione
-            await Shell.Current.GoToAsync(nameof(Profilo));
+            await Shell.Current.GoToAsync(nameof(Profilo), false);
         }
 
 

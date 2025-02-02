@@ -1,102 +1,84 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="ParkSystemApp.Registrazione"
-             Title="Registrazione"
-             BackgroundColor="#D99B9B">
+<ContentPage 
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="ParkSystemApp.Registrazione"
+    Title="Registrazione"
+    BackgroundColor="#D99B9B">
 
-    <VerticalStackLayout VerticalOptions="Center">
+    <Grid RowDefinitions="Auto,*">
+        <!-- CONTENUTO -->
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Margin="20" Spacing="20" VerticalOptions="Center">
+                <!-- Logo -->
+                <Image Source="icon.png" WidthRequest="80" HeightRequest="80" HorizontalOptions="Center"/>
+                <Label Text="Crea un account su Park System" 
+                       FontSize="24" 
+                       FontAttributes="Bold" 
+                       TextColor="White" 
+                       HorizontalOptions="Center"
+                       FontFamily="SawarabiGothic"/>
 
-        <Image
-            Source="Logo1.PNG"
-            WidthRequest="100"
-            HeightRequest="100"
-            HorizontalOptions="Center"
-            Margin="0,5,0,0" />
+                <!-- Form di Registrazione in stile neumorfico -->
+                <Frame BackgroundColor="White" CornerRadius="30" Padding="20">
+                    <VerticalStackLayout Spacing="20">
+                        <Entry x:Name="NomeEntry"
+                               Placeholder="Nome"
+                               TextColor="Black"
+                               BackgroundColor="White"/>
+                        <Entry x:Name="CognomeEntry"
+                               Placeholder="Cognome"
+                               TextColor="Black"
+                               BackgroundColor="White"/>
 
-        <Label
-            Text="Park System"
-            FontSize="Large"
-            HorizontalOptions="Center"
-            TextColor="White"
-            Margin="0,10,0,0" />
+                        <!-- Picker con stile coerente -->
+                        <Picker x:Name="TipoAvventuraPicker"
+                                Title="Seleziona Tipo di Avventura"
+                                TextColor="Black"
+                                BackgroundColor="White">
+                            <Picker.Items>
+                                <x:String>Famiglia</x:String>
+                                <x:String>Intermedia</x:String>
+                                <x:String>Estrema</x:String>
+                            </Picker.Items>
+                        </Picker>
 
-        <!-- NOME -->
-        <Entry 
-            x:Name="NomeEntry"
-            Placeholder="Nome"
-            TextColor="Black"
-            BackgroundColor="White"
-            Margin="40,25,40,0" />
+                        <Entry x:Name="EmailEntry"
+                               Placeholder="Email"
+                               TextColor="Black"
+                               BackgroundColor="White"/>
+                        <Entry x:Name="PasswordEntry"
+                               Placeholder="Password"
+                               IsPassword="True"
+                               TextColor="Black"
+                               BackgroundColor="White"/>
+                        <Entry x:Name="ConfermaPasswordEntry"
+                               Placeholder="Conferma Password"
+                               IsPassword="True"
+                               TextColor="Black"
+                               BackgroundColor="White"/>
 
-        <!-- COGNOME -->
-        <Entry 
-            x:Name="CognomeEntry"
-            Placeholder="Cognome"
-            TextColor="Black"
-            BackgroundColor="White"
-            Margin="40,25,40,0" />
+                        <!-- Bottone Registrazione -->
+                        <Button Text="Registrati"
+                                BackgroundColor="#F4A7A3"
+                                TextColor="White"
+                                CornerRadius="20"
+                                Clicked="ButtonRegistrati_Clicked"/>
+                    </VerticalStackLayout>
+                </Frame>
 
-        <!-- TIPO DI AVVENTURA (PICKER) -->
-        <Picker 
-            x:Name="TipoAvventuraPicker"
-            Title="Seleziona Tipo di Avventura"
-            TextColor="Black"
-            BackgroundColor="White"
-            Margin="40,25,40,0">
-            <!-- Esempio di voci fisse. Volendo puoi popolare dinamicamente questa lista. -->
-            <Picker.Items>
-                <x:String>Famiglia</x:String>
-                <x:String>Intermedia</x:String>
-                <x:String>Estrema</x:String>
-            </Picker.Items>
-        </Picker>
-
-        <!-- EMAIL -->
-        <Entry 
-            x:Name="EmailEntry"
-            Placeholder="Email"
-            TextColor="Black"
-            BackgroundColor="White"
-            Margin="40,25,40,0" />
-
-        <!-- PASSWORD -->
-        <Entry 
-            x:Name="PasswordEntry"
-            Placeholder="Password"
-            IsPassword="True"
-            TextColor="Black"
-            BackgroundColor="White"
-            Margin="40,25,40,0" />
-
-        <!-- CONFERMA PASSWORD -->
-        <Entry 
-            x:Name="ConfermaPasswordEntry"
-            Placeholder="Conferma Password"
-            IsPassword="True"
-            TextColor="Black"
-            BackgroundColor="White"
-            Margin="40,25,40,0" />
-
-        <!-- BOTTONE REGISTRAZIONE -->
-        <Button 
-            Text="Registrati"
-            BackgroundColor="Red"
-            TextColor="White"
-            Margin="100,15,100,30"
-            Clicked="ButtonRegistrati_Clicked" />
-
-        <Label 
-            Text="Già Registrato?"
-            HorizontalOptions="Center"
-            TextColor="White" />
-
-        <!-- BOTTONE LOGIN -->
-        <Button 
-            Text="Login"
-            HorizontalOptions="Center"
-            Clicked="Button_Clicked"
-            Margin="100,15,100,15"/>
-    </VerticalStackLayout>
-
+                
+                
+                <Button Text="Login"
+                        HorizontalOptions="Center"
+                        BorderColor="White"
+                        BorderWidth="1"
+                        CornerRadius="20"
+                        Padding="30,10,30,10"
+                        BackgroundColor="Transparent"
+                        TextColor="White"
+                        Clicked="Button_Clicked"/>
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
 </ContentPage>

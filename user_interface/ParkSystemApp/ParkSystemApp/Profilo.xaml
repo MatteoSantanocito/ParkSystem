@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage 
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
@@ -6,114 +6,118 @@
     Title="Profilo"
     BackgroundColor="White">
 
-    <!-- Layout principale: una Grid con due righe, una per la top bar e l'altra per il contenuto scorrevole -->
-    <Grid RowDefinitions="Auto,*">
+    <Grid RowDefinitions="Auto,*,Auto">
+        <!-- TOP BAR con bordi inferiori arrotondati, senza il bottone back -->
+        <Border
+            Grid.Row="0"
+            BackgroundColor="#F4A7A3"
+            Padding="20"
+            HeightRequest="100"
+            HorizontalOptions="FillAndExpand"
+            VerticalOptions="Start">
+            <!-- Arrotondamento dei soli angoli inferiori -->
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="0,0,20,20" />
+            </Border.StrokeShape>
+            <!-- Titolo centrato -->
+            <Grid>
+                <Label
+                    x:Name="WelcomeLabel"
+                    Text="Benvenuto, "
+                    HorizontalOptions="Start"
+                    VerticalOptions="Center"
+                    FontSize="25"
+                    FontAttributes="Bold"
+                    TextColor="Black" />
+            </Grid>
+        </Border>
 
-        <!-- Top Bar -->
-        <Grid BackgroundColor="#F4A7A3" Padding="10" HeightRequest="60" Grid.Row="0">
-            <Grid.ColumnDefinitions>
-                <!-- La prima colonna avrà dimensione automatica per l'icona -->
-                <ColumnDefinition Width="Auto"/>
-                <!-- La seconda colonna occuperà il resto dello spazio -->
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-
-            <!-- Bottone Logout nella prima colonna -->
-            <ImageButton 
-                Source="logout.png" 
-                Clicked="OnLogoutClicked"
-                HorizontalOptions="Start"
-                VerticalOptions="Center"
-                Aspect="AspectFit"
-                Grid.Column="0"/>
-
-            <!-- Label Benvenuto, Nome nella seconda colonna, allineata a destra -->
-            <Label 
-                x:Name="WelcomeLabel"
-                Text="Benvenuto, " 
-                HorizontalOptions="End"
-                VerticalOptions="Center"
-                FontSize="16"
-                FontAttributes="Bold"
-                Grid.Column="1"/>
-        </Grid>
-
-        <!-- Contenuto scorrevole -->
+        <!-- CONTENUTO Scorrevole -->
         <ScrollView Grid.Row="1">
             <VerticalStackLayout Margin="20" Spacing="20">
 
                 <!-- Sezione Informazioni Account -->
-                <Frame BorderColor="#F4A7A3" CornerRadius="5" Padding="10">
-                    <VerticalStackLayout Spacing="10">
+                <Frame BorderColor="#F4A7A3" CornerRadius="30" Padding="20">
+                    <VerticalStackLayout Spacing="20">
                         <Label Text="Informazioni account"
                                FontSize="14"
                                FontAttributes="Bold" />
 
-                        <!-- Layout flessibile per Email + freccia -->
+                        <!-- Email + freccia -->
                         <Grid ColumnSpacing="10">
                             <Grid.ColumnDefinitions>
-                                <!-- La prima colonna occupa il doppio della larghezza della seconda -->
-                                <ColumnDefinition Width="2*"/>
-                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="3*" />
+                                <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
 
-                            <!-- Dati email -->
                             <VerticalStackLayout Grid.Column="0">
-                                
                                 <Label Text="Email" FontSize="12" />
                                 <Label x:Name="EmailLabel" FontSize="14" />
                             </VerticalStackLayout>
 
-                            <!-- Bottone freccia per cambio email -->
-                            <ImageButton 
-                                Grid.Column="1"
-                                Source="arrow.png"
-                                Clicked="OnChangeEmailClicked"
-                                HorizontalOptions="FillAndExpand"
-                                VerticalOptions="Center"
-                                Aspect="AspectFit"
-                                WidthRequest="10"/>
+                            <Label Text="&#xe5cc;" 
+                                   FontFamily="MaterialIcons"
+                                   FontSize="24"
+                                   TextColor="Black"
+                                   HorizontalOptions="End"
+                                   VerticalOptions="Center">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnChangeEmailClicked" />
+                                </Label.GestureRecognizers>
+                            </Label>
                         </Grid>
 
-                        <!-- Layout flessibile per Password + freccia -->
+                        <!-- Password + freccia -->
                         <Grid ColumnSpacing="10">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="2*"/>
-                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="3*" />
+                                <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
 
-                            <!-- Dati password (mascherata) -->
                             <VerticalStackLayout Grid.Column="0">
                                 <Label Text="Password" FontSize="12" />
                                 <Label Text="**********" FontSize="14" />
                             </VerticalStackLayout>
 
-                            <!-- Bottone freccia per cambio password -->
-                            <ImageButton 
-                                Grid.Column="1"
-                                Source="arrow.png"
-                                Clicked="OnChangePasswordClicked"
-                                HorizontalOptions="FillAndExpand"
-                                VerticalOptions="Center"
-                                Aspect="AspectFit"/>
+                            <Label Text="&#xe5cc;" 
+                                   FontFamily="MaterialIcons"
+                                   FontSize="24"
+                                   TextColor="Black"
+                                   HorizontalOptions="End"
+                                   VerticalOptions="Center">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnChangePasswordClicked" />
+                                </Label.GestureRecognizers>
+                            </Label>
                         </Grid>
                     </VerticalStackLayout>
                 </Frame>
 
                 <!-- Sezione Informazioni Personali -->
-                <Frame BorderColor="#F4A7A3" CornerRadius="5" Padding="10">
+                <Frame BorderColor="#F4A7A3" CornerRadius="30" Padding="20">
                     <VerticalStackLayout Spacing="10">
                         <Label Text="Informazioni personali"
-                               FontSize="14"
+                               FontSize="16"
                                FontAttributes="Bold" />
-                        <Label Text="Nome" FontSize="12" />
-                        <Label x:Name="NomeValLabel" FontSize="14" />
+                        <Label Text="Nome" FontSize="14" />
+                        <Label x:Name="NomeValLabel" FontSize="14"  />
+                        <BoxView HeightRequest="1" BackgroundColor="#F4A7A3" />
+
                         <Label Text="Cognome" FontSize="12" />
                         <Label x:Name="CognomeValLabel" FontSize="14" />
+                        <BoxView HeightRequest="1" BackgroundColor="#F4A7A3" />
+
                         <Label Text="Tipo di avventura" FontSize="12" />
                         <Label x:Name="TipoAvvLabel" FontSize="14" />
                     </VerticalStackLayout>
                 </Frame>
+
+                <!-- Bottone Logout (stesso colore della top bar) -->
+                <Button Text="Logout"
+                        Clicked="OnLogoutClicked"
+                        TextColor="Black"
+                        BackgroundColor="#F4A7A3"
+                        FontAttributes="Bold" />
 
                 <!-- Pulsante per Elimina Account -->
                 <Button Text="Elimina Account"
@@ -122,5 +126,35 @@
                         Clicked="OnEliminaAccountClicked"/>
             </VerticalStackLayout>
         </ScrollView>
+
+        <!-- NAV BAR INFERIORE -->
+        <Grid Grid.Row="2" BackgroundColor="#F4A7A3" Padding="10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="0"
+                    Text="&#xe88a;"
+                    FontFamily="MaterialIcons"
+                    FontSize="20"
+                    TextColor="Black"
+                    BackgroundColor="Transparent"
+                    Clicked="OnBackToMainPageClicked" />
+            <Button Grid.Column="1"
+                    Text="&#xe838;"
+                    FontFamily="MaterialIcons"
+                    FontSize="20"
+                    TextColor="Black"
+                    BackgroundColor="Transparent"
+                     />
+            <Button Grid.Column="2"
+                    Text="&#xe7fd;"
+                    FontFamily="MaterialIcons"
+                    FontSize="20"
+                    TextColor="Black"
+                    BackgroundColor="Transparent"
+                    />
+        </Grid>
     </Grid>
 </ContentPage>

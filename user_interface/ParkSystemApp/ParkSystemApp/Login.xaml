@@ -1,65 +1,61 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="ParkSystemApp.Login"
-             Title="Login"
-             BackgroundColor="#D99B9B"> 
+<ContentPage 
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="ParkSystemApp.Login"
+    Title="Login"
+    BackgroundColor="#D99B9B">
 
-
-    <VerticalStackLayout VerticalOptions="Center" >
-
-        <Image
-            Source="Logo1.PNG"
-            WidthRequest="100"
-            HeightRequest="100"
-            HorizontalOptions="Center"
-            Margin="0,5,0,0"/>
-
-        <Label
-            Text="Park System"
-            FontSize="Large"
-            HorizontalOptions="Center"
-            TextColor="White"
-            Margin="0,10,0,0"/>
-
-        <Entry
-            x:Name="emailEntry"
-            Placeholder="email"
-            TextColor="Black"
-            BackgroundColor="White"
-            Margin="40,50,40,10"
-            />
-
-        <Entry
-            x:Name="passwordText"
-            Placeholder="password"
-            IsPassword="True"
-            TextColor="Black"
-            BackgroundColor="White"
-            Margin="40,0,40,10"
-            />
-
-        <Button
-            Text="Login"
-            BackgroundColor="Purple"
-            TextColor="White"
-            Margin="100,15,100,30"
-            Clicked="Button_Login_Clicked"/>
-
-        <Label
-            Text="Non sei ancora Registrato?"
-            HorizontalOptions="Center"
-            TextColor="White"/>
-
-        <Button 
-            Text="Registrati"
-            HorizontalOptions="Center"
-            Clicked="Button_Clicked"/>
-
-        <Label x:Name="DescrizioneLabel"
-               FontSize="Small"
-               TextColor="Gray"/>
-
-    </VerticalStackLayout>
+    <Grid RowDefinitions="Auto,*">
+ 
         
+
+        <!-- CONTENUTO -->
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Margin="20" Spacing="20" VerticalOptions="Center">
+                <!-- Form di Login in stile neumorfico -->
+                <Image Source="icon.png" WidthRequest="80" HeightRequest="80" HorizontalOptions="Center"/>
+                <Label Text="Benvenuto in Park System" 
+                        FontSize="24" 
+                        FontAttributes="Bold" 
+                        TextColor="White" 
+                        HorizontalOptions="Center"
+                        FontFamily="SawarabiGothic"/>
+                
+                <Frame BackgroundColor="White" CornerRadius="30" Padding="20" >
+                    <VerticalStackLayout Spacing="20">
+                        <Entry x:Name="emailEntry"
+                   Placeholder="email"
+                   TextColor="Black"
+                   BackgroundColor="White"/>
+                        <Entry x:Name="passwordText"
+                   Placeholder="password"
+                   IsPassword="True"
+                   TextColor="Black"
+                   BackgroundColor="White"/>
+                        <Button Text="Login"
+                    BackgroundColor="#F4A7A3"
+                    TextColor="White"
+                    CornerRadius="20"
+                    Clicked="Button_Login_Clicked"/>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Prompt Registrazione -->
+                <Button Text="Crea un Account"
+                HorizontalOptions="Center"
+                BorderColor="White"
+                BorderWidth="1"
+                CornerRadius="20"
+                Padding="20,10,20,10"
+                BackgroundColor="Transparent"
+                TextColor="White"
+                Clicked="Button_Clicked"/>
+                <Label x:Name="DescrizioneLabel"
+               FontSize="Small"
+               TextColor="Gray"
+               HorizontalOptions="Center"/>
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
 </ContentPage>

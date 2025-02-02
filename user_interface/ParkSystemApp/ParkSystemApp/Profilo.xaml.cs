@@ -36,6 +36,11 @@ namespace ParkSystemApp
             await Shell.Current.GoToAsync("//Login");
         }
 
+        private async void OnBackToMainPageClicked(Object sender, EventArgs e)
+        {
+            await Shell.Current.GoToAsync($"//{nameof(MainPage)}", false);
+        }
+
         private async void OnChangeEmailClicked(object sender, EventArgs e)
         {
             // Naviga a pagina cambio email
