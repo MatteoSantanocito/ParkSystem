@@ -6,7 +6,9 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
 
+	"backend-go/models"
 	"backend-go/routes"
 
 	"gopkg.in/yaml.v2"
@@ -41,6 +43,21 @@ func loadConfig(path string) (*Config, error) {
 	return &config, nil
 }
 
+// funzione per schedulare la pulizia delle prenotazioni scadute
+func scheduleBookingCleanup(db *sql.DB) {
+	ticker := time.NewTicker(1 * time.Minute)
+	go func() {
+		for range ticker.C {
+			err := models.DeleteExpiredBookings(db)
+			if err != nil {
+				log.Printf("Errore durante l'eliminazione delle prenotazioni scadute: %v", err)
+			} else {
+				log.Println("Prenotazioni scadute eliminate con successo")
+			}
+		}
+	}()
+}
+
 func main() {
 	// Carica la configurazione
 	config, err := loadConfig("config/config.yml")
@@ -69,10 +86,13 @@ func main() {
 	// Configura le route
 	r := routes.SetupRoutes(db, config.JWT.Secret)
 
+	// Schedula la pulizia delle prenotazioni
+	scheduleBookingCleanup(db)
 	// Avvia il server
 	log.Println("Server in ascolto su :8080")
 	err = http.ListenAndServe(":8080", r)
 	if err != nil {
 		log.Fatalf("Errore nell'avvio del server: %v", err)
 	}
+
 }
