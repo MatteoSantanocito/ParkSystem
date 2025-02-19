@@ -6,6 +6,8 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.Maui.Storage;
 using System.Text.Json.Serialization;
+using ParkSystemApp.Models;
+using Newtonsoft.Json;
 
 
 namespace ParkSystemApp.Services
@@ -34,7 +36,7 @@ namespace ParkSystemApp.Services
                 };
 
                 var content = new StringContent(
-                    JsonSerializer.Serialize(loginData),
+                    System.Text.Json.JsonSerializer.Serialize(loginData),
                     Encoding.UTF8,
                     "application/json"
                 );
@@ -50,7 +52,7 @@ namespace ParkSystemApp.Services
 
 
                 var json = await response.Content.ReadAsStringAsync();
-                var loginResponse = JsonSerializer.Deserialize<LoginResponse>(json);
+                var loginResponse = System.Text.Json.JsonSerializer.Deserialize<LoginResponse>(json);
 
 
                 // Se il token è presente, lo salviamo in SecureStorage
@@ -94,7 +96,7 @@ namespace ParkSystemApp.Services
                 };
 
                 var content = new StringContent(
-                    JsonSerializer.Serialize(registerData),
+                    System.Text.Json.JsonSerializer.Serialize(registerData),
                     Encoding.UTF8,
                     "application/json"
                 );
@@ -137,7 +139,7 @@ namespace ParkSystemApp.Services
                 };
 
                 var content = new StringContent(
-                    JsonSerializer.Serialize(payload),
+                    System.Text.Json.JsonSerializer.Serialize(payload),
                     Encoding.UTF8,
                     "application/json"
                 );
@@ -178,7 +180,7 @@ namespace ParkSystemApp.Services
                 };
 
                 var content = new StringContent(
-                    JsonSerializer.Serialize(payload),
+                    System.Text.Json.JsonSerializer.Serialize(payload),
                     Encoding.UTF8,
                     "application/json"
                 );
@@ -252,5 +254,104 @@ namespace ParkSystemApp.Services
             public string TipoAvventura { get; set; }
            
         }
+
+        public async Task<String> BookAttractionAsync(int id)
+        {
+            var token = await SecureStorage.GetAsync("AuthToken");
+            if (string.IsNullOrEmpty(token))
+            {
+                return "Errore: Nessun token presente. Utente non loggato?";
+            }
+
+            _httpClient.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", token);
+
+            // Creazione del payload JSON
+            var payload = new
+            {
+                AttractionID = id
+            };
+
+
+            // Serializzazione del payload in JSON
+            var content = new StringContent(
+                                            System.Text.Json.JsonSerializer.Serialize(payload),
+                                            Encoding.UTF8,
+                                            "application/json");
+
+            // Invio della richiesta POST al server
+            try
+            {
+                var response = await _httpClient.PostAsync("/book/create", content);
+                if (response.IsSuccessStatusCode)
+                {
+                    // Se il server restituisce successo, possiamo anche leggere e restituire il corpo della risposta se necessario
+                    return await response.Content.ReadAsStringAsync();  // Supponiamo che il backend restituisca una conferma o dettagli della prenotazione
+                }
+                else
+                {
+                    // Legge il messaggio di errore dal server e lo restituisce
+                    return $"Errore nella prenotazione: {await response.Content.ReadAsStringAsync()}";
+                }
+            }
+            catch (Exception ex)
+            {
+                return $"Errore di connessione al server: {ex.Message}";
+            }
+        }
+
+        public async Task<string> DeleteBookingAsync()
+        {
+            try
+            {
+                var token = await SecureStorage.GetAsync("AuthToken");
+                if (string.IsNullOrEmpty(token))
+                {
+                    return "Errore: Nessun token presente. Utente non loggato?";
+                }
+
+                _httpClient.DefaultRequestHeaders.Authorization =
+                    new AuthenticationHeaderValue("Bearer", token);
+
+                var response = await _httpClient.DeleteAsync("/book/delete");
+                if (!response.IsSuccessStatusCode)
+                {
+                    var err = await response.Content.ReadAsStringAsync();
+                    return $"Errore: {err}";
+                }
+
+                return "Prenotazione cancellata con successo";
+            }
+            catch (Exception ex)
+            {
+                return $"Errore: {ex.Message}";
+            }
+        }
+
+
+        public async Task<List<Attrazione>> GetAttrazioniAsync()
+        {
+            try
+            {
+                HttpResponseMessage response = await _httpClient.GetAsync("/attrazioni");
+                if (response.IsSuccessStatusCode)
+                {
+                    string jsonResponse = await response.Content.ReadAsStringAsync();
+                    List<Attrazione> attrazioni = JsonConvert.DeserializeObject<List<Attrazione>>(jsonResponse);
+                    return attrazioni;
+                }
+                else
+                {
+                    // Gestisci il caso in cui la risposta non sia successo
+                    throw new Exception("Non è stato possibile recuperare le attrazioni");
+                }
+            }
+            catch (Exception ex)
+            {
+                // Gestisci eventuali eccezioni
+                throw new Exception($"Errore durante il recupero delle attrazioni: {ex.Message}");
+            }
+        }
+
     }
 }

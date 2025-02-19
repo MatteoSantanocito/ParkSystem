@@ -1,40 +1,89 @@
-<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="ParkSystemApp.AttrazionePage"
              Title="AttrazionePage"
              BackgroundColor="#D99B9B">
 
+    <Grid RowDefinitions="*, Auto, Auto">
+        <!-- Grid per le informazioni della giostra -->
+        <ScrollView Grid.Row="0">
+            <VerticalStackLayout Padding="20">
+                <Label Text="{Binding Nome}"
+                       FontSize="45"
+                       HorizontalOptions="Center"
+                       Padding="10"/>
+                <Image Source="{Binding ImagePath}"
+                       HorizontalOptions="Center"
+                       HeightRequest="200"
+                       WidthRequest="200"/>
+                <Label Text="{Binding Descrizione}"
+                       FontSize="25"
+                       HorizontalOptions="Center"
+                       Padding="0,10,0,10"/>
+                <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Padding="10">
+                    <Label Text="Età minima: "
+                           FontSize="25"/>
+                    <Label Text="{Binding MinimumAge}"
+                           FontSize="25"/>
+                </StackLayout>
+            </VerticalStackLayout>
+        </ScrollView>
 
+        <!-- Nuova Grid per la domanda di prenotazione e bottone, subito sotto le informazioni -->
+        <Grid Grid.Row="1" Padding="10">
+            <VerticalStackLayout HorizontalOptions="Center" Spacing="10">
+                <Label x:Name="BookingLabel"
+                       Text="Vuoi prenotare un posto?"
+                       FontSize="20"
+                       HorizontalOptions="Center"
+                       IsVisible="True"/>
+                <Button x:Name="BookButton"
+                        Text="Prenota ora"
+                        FontSize="20"
+                        BackgroundColor="Blue"
+                        TextColor="White"
+                        HorizontalOptions="Center"
+                        Clicked="OnBookClicked"
+                        IsVisible="True"/>
+                <Button x:Name="CancelButton"
+                        Text="Annulla prenotazione"
+                        FontSize="20"
+                        BackgroundColor="Red"
+                        TextColor="White"
+                        HorizontalOptions="Center"
+                        Clicked="OnCancelClicked"
+                        IsVisible="False"/>
+            </VerticalStackLayout>
+        </Grid>
 
-    <VerticalStackLayout Padding="20">
-        <Label Text="{Binding Nome}"
-               FontSize="24"
-               HorizontalOptions="Center"/>
-        <Label Text="{Binding Descrizione}"
-               FontSize="16"
-               HorizontalOptions="Center"/>
-        <Label Text="{Binding Tipologia}"
-               FontSize="16"
-               HorizontalOptions="Center"/>
-        <Label Text="{Binding Tematica}"
-               FontSize="16"
-               HorizontalOptions="Center"/>
-        <Label Text="{Binding MinimumAge}"
-               FontSize="16"    
-               HorizontalOptions="Center"/>
-        <Label Text="{Binding State}"
-               FontSize="16"
-               HorizontalOptions="Center"/>
-        <Label Text="{Binding HourCapacity}"
-               FontSize="16"
-               HorizontalOptions="Center"/>
-        <Image Source="{Binding ImagePath}"
-               HorizontalOptions="Center"
-               HeightRequest="100"/>
-    </VerticalStackLayout>
-
-
-
+        <!-- Grid per i pulsanti di navigazione, ancorata in basso -->
+        <Grid Grid.Row="2" VerticalOptions="End">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="0"
+                    Text="&#xe88a;"
+                    FontFamily="MaterialIcons"
+                    FontSize="20"
+                    TextColor="Black"
+                    BackgroundColor="Transparent"
+                    Clicked="OnBackToMainPageClicked" />
+            <Button Grid.Column="1"
+                    Text="&#xe838;"
+                    FontFamily="MaterialIcons"
+                    FontSize="20"
+                    TextColor="Black"
+                    BackgroundColor="Transparent"/>
+            <Button Grid.Column="2"
+                    Text="&#xe7fd;"
+                    FontFamily="MaterialIcons"
+                    FontSize="20"
+                    TextColor="Black"
+                    BackgroundColor="Transparent"
+                    Clicked="OnProfileClicked"/>
+        </Grid>
+    </Grid>
 
 </ContentPage>
