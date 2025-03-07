@@ -4,7 +4,7 @@
              Title="AttrazionePage"
              BackgroundColor="#D99B9B">
 
-    <Grid RowDefinitions="*, Auto, Auto">
+    <Grid RowDefinitions="3*, Auto, Auto, 1*">
         <!-- Grid per le informazioni della giostra -->
         <ScrollView Grid.Row="0">
             <VerticalStackLayout Padding="20">
@@ -29,8 +29,31 @@
             </VerticalStackLayout>
         </ScrollView>
 
-        <!-- Nuova Grid per la domanda di prenotazione e bottone, subito sotto le informazioni -->
-        <Grid Grid.Row="1" Padding="10">
+        <Grid Grid.Row="1" x:Name="RatingGrid">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="0" Text="&#xe838;" FontFamily="MaterialIcons" FontSize="30"
+           Clicked="OnStarClicked" CommandParameter="1" BackgroundColor="Red" TextColor="White"/>
+            <Button Grid.Column="1" Text="&#xe838;" FontFamily="MaterialIcons" FontSize="30"
+           Clicked="OnStarClicked" CommandParameter="2" BackgroundColor="Orange" TextColor="White"/>
+            <Button Grid.Column="2" Text="&#xe838;" FontFamily="MaterialIcons" FontSize="30"
+           Clicked="OnStarClicked" CommandParameter="3" BackgroundColor="Yellow" TextColor="White"/>
+            <Button Grid.Column="3" Text="&#xe838;" FontFamily="MaterialIcons" FontSize="30"
+           Clicked="OnStarClicked" CommandParameter="4" BackgroundColor="LightGreen" TextColor="White"/>
+            <Button Grid.Column="4" Text="&#xe838;" FontFamily="MaterialIcons" FontSize="30"
+           Clicked="OnStarClicked" CommandParameter="5" BackgroundColor="Green" TextColor="White"/>
+        </Grid>
+
+
+
+
+
+        <Grid Grid.Row="2" Padding="10">
             <VerticalStackLayout HorizontalOptions="Center" Spacing="10">
                 <Label x:Name="BookingLabel"
                        Text="Vuoi prenotare un posto?"
@@ -57,7 +80,7 @@
         </Grid>
 
         <!-- Grid per i pulsanti di navigazione, ancorata in basso -->
-        <Grid Grid.Row="2" VerticalOptions="End">
+        <Grid Grid.Row="3" VerticalOptions="End">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />

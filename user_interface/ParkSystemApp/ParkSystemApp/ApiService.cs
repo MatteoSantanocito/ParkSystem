@@ -8,6 +8,7 @@ using Microsoft.Maui.Storage;
 using System.Text.Json.Serialization;
 using ParkSystemApp.Models;
 using Newtonsoft.Json;
+using System.Buffers.Text;
 
 
 namespace ParkSystemApp.Services
@@ -351,6 +352,50 @@ namespace ParkSystemApp.Services
                 // Gestisci eventuali eccezioni
                 throw new Exception($"Errore durante il recupero delle attrazioni: {ex.Message}");
             }
+        }
+
+        public async Task<String> SendRating(int attractionId, int rating)
+        {
+            var token = await SecureStorage.GetAsync("AuthToken");
+            if (string.IsNullOrEmpty(token))
+            {
+                return "Errore: Nessun token presente. Utente non loggato?";
+            }
+
+            _httpClient.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", token);
+
+            // Creazione del payload da inviare
+            var payload = new
+            {
+                AttractionId = attractionId,
+                Rating = rating
+            };
+
+            // Serializzazione del payload in JSON
+            var content = new StringContent(
+                                            System.Text.Json.JsonSerializer.Serialize(payload),
+                                            Encoding.UTF8,
+                                            "application/json");
+
+            // Invio della richiesta POST al backend
+            try
+            {
+                var response = await _httpClient.PostAsync("/ratings", content);
+                if (response.IsSuccessStatusCode)
+                {
+                    return await response.Content.ReadAsStringAsync();
+                }
+                else
+                {
+                    return $"Errore: {response.StatusCode}";
+                }
+            }
+            catch (Exception ex)
+            {
+                return $"Eccezione: {ex.Message}";
+            }
+
         }
 
     }

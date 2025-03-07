@@ -2,6 +2,8 @@ namespace ParkSystemApp;
 
 using ParkSystemApp.Services;
 using ParkSystemApp.Models;
+using System.Diagnostics;
+
 public partial class AttrazionePage : ContentPage, IQueryAttributable
 {
     private readonly ApiService _apiService;
@@ -72,5 +74,19 @@ public partial class AttrazionePage : ContentPage, IQueryAttributable
         
     }
 
+    private async void OnStarClicked(object sender, EventArgs e)
+    {
+        if (BindingContext is Attrazione attr)
+        {
+            var button = sender as Button;
+            if (button != null)
+            {
+                int rating = Convert.ToInt32(button.CommandParameter);
 
+                ApiService apiService = new ApiService();
+                await apiService.SendRating(attr.ID, rating);
+
+            }
+        }
+    }
 }

@@ -31,6 +31,8 @@ func SetupRoutes(db *sql.DB, jwtSecret string) *mux.Router {
 	// Endpoint pubblici (non protetti) per ottenere informazioni sulle attrazioni
 	r.HandleFunc("/attrazioni", handlers.GetAttrazioniHandler(db)).Methods("GET")
 
+	r.Handle("/ratings", middleware.JWTMiddleware(handlers.PostRatingHandler(db))).Methods("POST")
+
 	///gli endpoint per registrazione e login sono pubblici: non richiedono che
 	///l'utente sia già autenticato, perché sono il punto di ingresso per ottenere
 	///il token. Invece, le operazioni che modificano dati sensibili (cambio email,
