@@ -11,7 +11,16 @@ VALUES
 INSERT INTO attrazioni (nome, descrizione, tipologia, tematica, eta_minima, stato, capacita_oraria)
 VALUES 
 ('Montagna Russa', 'Attrazione ad alta velocità', 'Thrill Ride', 'Fantasy', 12, 'attiva', 500),
-('Carosello', 'Giostra classica per tutte le età', 'Giostra', 'Famiglia', 0, 'chiusa', 300);
+('Carosello', 'Giostra classica per tutte le età', 'Giostra', 'Famiglia', 0, 'chiusa', 300),
+('Atlantide', 'Giostra ad alta velocità', 'Thrill Ride', 'Fantasy', 14, 'attiva', 400),
+('Ruota Panoramica', 'Giostra panoramica', 'Giostra', 'Famiglia', 0, 'attiva', 200),
+('Casa Stregata', 'Attrazione horror', 'Dark Ride', 'Horror', 16, 'attiva', 100),
+('Treno Fantasma', 'Attrazione horror', 'Dark Ride', 'Horror', 16, 'attiva', 100),
+('Pirati', 'Attrazione acquatica', 'Water Ride', 'Adventure', 10, 'chiusa', 300),
+('Canyon', 'Attrazione acquatica', 'Water Ride', 'Adventure', 10, 'attiva', 300),
+('Cinema 4D', 'Attrazione cinematografica', 'Show', 'Fantasy', 0, 'attiva', 100),
+('Teatro', 'Attrazione teatrale', 'Show', 'Fantasy', 0, 'attiva', 100),
+('Casetta', 'Attrazione per bambini', 'Playground', 'Famiglia', 3, 'attiva', 100);
 
 INSERT INTO prenotazioni (id_utente, id_attrazione, orario_previsto)
 VALUES ((SELECT id_utente FROM utenti WHERE email='matteosantanocito@outlook.it'),
