@@ -1,5 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using System.Globalization;
+using Plugin.LocalNotification;
+using Plugin.LocalNotification.AndroidOption;
 
 namespace ParkSystemApp
 {
@@ -19,7 +21,7 @@ namespace ParkSystemApp
                     fonts.AddFont("MaterialIcons-Regular.ttf", "MaterialIcons");
                 });
 
-                CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("it-IT");
+            CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("it-IT");
                 CultureInfo.DefaultThreadCurrentUICulture = new CultureInfo("it-IT");
 
 #if DEBUG

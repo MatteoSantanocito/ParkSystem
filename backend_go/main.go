@@ -8,6 +8,7 @@ import (
 	"os"
 	"time"
 
+	"backend-go/handlers"
 	"backend-go/models"
 	"backend-go/routes"
 
@@ -30,6 +31,55 @@ type Config struct {
 	} `yaml:"jwt"`
 }
 
+func checkAndSendBookingAlerts(db *sql.DB) {
+	// Calcola il tempo attuale e il tempo 10 minuti nel futuro
+	now := time.Now()
+	tenMinutesLater := now.Add(10 * time.Minute)
+
+	// Query che recupera il nome dell'attrazione e l'ID utente della prenotazione
+	query := `
+        SELECT a.nome, p.id_utente 
+		FROM prenotazioni p
+		JOIN attrazioni a ON p.id_attrazione = a.id_attrazione
+		WHERE p.orario_previsto BETWEEN $1 AND $2
+
+    `
+	rows, err := db.Query(query, now, tenMinutesLater)
+	if err != nil {
+		log.Printf("Errore durante il controllo delle prenotazioni: %v", err)
+		return
+	}
+	defer rows.Close()
+
+	// Itera sui risultati e invia notifiche mirate per ogni prenotazione imminente
+	for rows.Next() {
+		var nomeAttrazione string
+		var bookingUserID int
+		if err := rows.Scan(&nomeAttrazione, &bookingUserID); err != nil {
+			log.Printf("Errore durante la lettura delle prenotazioni: %v", err)
+			continue
+		}
+
+		// Logga i dati estratti dalla riga
+		log.Printf("Prenotazione trovata: attrazione = %s, id_utente = %d", nomeAttrazione, bookingUserID)
+
+		notificationMsg := "Mancano 10 minuti per l'attrazione " + nomeAttrazione
+		handlers.SendNotificationToUser(notificationMsg, bookingUserID)
+	}
+
+	if err := rows.Err(); err != nil {
+		log.Printf("Errore durante il recupero delle prenotazioni: %v", err)
+	}
+}
+
+func scheduleBookingAlerts(db *sql.DB) {
+	ticker := time.NewTicker(1 * time.Minute) // Controlla ogni minuto
+	go func() {
+		for range ticker.C {
+			checkAndSendBookingAlerts(db)
+		}
+	}()
+}
 func loadConfig(path string) (*Config, error) {
 	file, err := os.ReadFile(path)
 	if err != nil {
@@ -43,9 +93,10 @@ func loadConfig(path string) (*Config, error) {
 	return &config, nil
 }
 
-// funzione per schedulare la pulizia delle prenotazioni scadute
+// funzione per schedulare la pulizia delle prenotazioni scadute una volta al mese
 func scheduleBookingCleanup(db *sql.DB) {
-	ticker := time.NewTicker(1 * time.Minute)
+	// Definisce il ticker per ogni 30 giorni (30 * 24 ore)
+	ticker := time.NewTicker(30 * 24 * time.Hour)
 	go func() {
 		for range ticker.C {
 			err := models.DeleteExpiredBookings(db)
@@ -88,6 +139,8 @@ func main() {
 
 	// Schedula la pulizia delle prenotazioni
 	scheduleBookingCleanup(db)
+
+	scheduleBookingAlerts(db)
 	// Avvia il server
 	log.Println("Server in ascolto su :8080")
 	err = http.ListenAndServe(":8080", r)

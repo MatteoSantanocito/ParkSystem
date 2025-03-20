@@ -17,43 +17,59 @@ type BookingRequest struct {
 
 // Calcola il prossimo orario disponibile per la prenotazione
 func CalculateNextAvailableTime(db *sql.DB, attractionID int) (time.Time, error) {
-	// Ottieni la capacità oraria dall'attrazione specificata
+	// Ottieni la capacità oraria dall'attrazione
 	var maxPerHour int
 	capacityQuery := `SELECT capacita_oraria FROM attrazioni WHERE id_attrazione = $1`
-	err := db.QueryRow(capacityQuery, attractionID).Scan(&maxPerHour)
-	if err != nil {
-		return time.Time{}, err // Ritorna errore se la query fallisce o l'attrazione non esiste
+	if err := db.QueryRow(capacityQuery, attractionID).Scan(&maxPerHour); err != nil {
+		return time.Time{}, err
 	}
 
 	const rideDuration = 2 * time.Minute
 
+	// Usa l'orario corrente (se vuoi locale, usa time.Now().Local() o In(loc))
 	currentTime := time.Now()
-	hourStart := time.Date(currentTime.Year(), currentTime.Month(), currentTime.Day(), currentTime.Hour(), 0, 0, 0, currentTime.Location())
 
-	// Calcola il numero di slot passati dall'inizio dell'ora fino all'orario corrente
-	slotsPassed := int(currentTime.Sub(hourStart) / rideDuration)
+	// Inizia dall'inizio dell'ora corrente
+	hourStart := time.Date(
+		currentTime.Year(),
+		currentTime.Month(),
+		currentTime.Day(),
+		currentTime.Hour(),
+		0,
+		0,
+		0,
+		currentTime.Location(),
+	)
 
 	for {
 		hourEnd := hourStart.Add(time.Hour)
+
+		// Conta le prenotazioni già presenti nell'intervallo [hourStart, hourEnd)
 		var count int
 		query := `SELECT COUNT(*) FROM prenotazioni WHERE id_attrazione = $1 AND orario_previsto BETWEEN $2 AND $3`
-		err := db.QueryRow(query, attractionID, hourStart, hourEnd).Scan(&count)
-		if err != nil {
+		if err := db.QueryRow(query, attractionID, hourStart, hourEnd).Scan(&count); err != nil {
 			return time.Time{}, err
 		}
 
-		if count < maxPerHour {
-			expectedTime := hourStart.Add(time.Duration(count) * rideDuration)
-			// Assicurati che l'expectedTime sia anche dopo l'currentTime
-			if expectedTime.After(currentTime) && count >= slotsPassed {
-				return expectedTime, nil
-			}
+		// Calcola expectedTime in base al numero di prenotazioni presenti
+		expectedTime := hourStart.Add(time.Duration(count) * rideDuration)
+
+		// Se expectedTime è nel passato rispetto a currentTime,
+		// calcola il prossimo slot disponibile nell'ora corrente.
+		if !expectedTime.After(currentTime) {
+			// Calcola quanti slot dovrebbero essere passati per essere dopo currentTime.
+			elapsed := currentTime.Sub(hourStart)
+			nextSlot := int(elapsed/rideDuration) + 1
+			expectedTime = hourStart.Add(time.Duration(nextSlot) * rideDuration)
 		}
 
-		// Se non ci sono slot disponibili nell'ora corrente, o tutti gli slot sono nel passato,
-		// sposta hourStart all'hourEnd e aggiusta slotsPassed per la nuova ora
+		// Se c'è ancora capacità in questa fascia oraria e expectedTime è entro l'ora
+		if count < maxPerHour && expectedTime.Before(hourEnd) && expectedTime.After(currentTime) {
+			return expectedTime, nil
+		}
+
+		// Altrimenti, passa all'ora successiva e resetta gli slot passati
 		hourStart = hourEnd
-		slotsPassed = 0 // Reset dei slot passati poiché ora sei in una nuova ora
 	}
 }
 
@@ -87,11 +103,13 @@ func CreateBookingHandler(db *sql.DB) http.HandlerFunc {
 			return
 		}
 
+		localTimeStr := expectedTime.Local().Format(time.RFC3339)
+
 		w.WriteHeader(http.StatusCreated)
 		json.NewEncoder(w).Encode(map[string]interface{}{
 			"userID":       userID,
 			"attractionID": req.AttractionID,
-			"expectedTime": expectedTime,
+			"expectedTime": localTimeStr,
 		})
 	}
 }

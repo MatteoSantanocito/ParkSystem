@@ -10,6 +10,9 @@ COPY go.mod go.sum ./
 # Scarica le dipendenze
 RUN go mod download
 
+# Imposta la timezone di default a Europe/Rome
+ENV TZ=Europe/Rome
+
 # Copia tutto il resto del codice sorgente
 COPY . .
 

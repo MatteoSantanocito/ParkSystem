@@ -33,6 +33,11 @@ func SetupRoutes(db *sql.DB, jwtSecret string) *mux.Router {
 
 	r.Handle("/ratings", middleware.JWTMiddleware(handlers.PostRatingHandler(db))).Methods("POST")
 
+	// Aggiungi le route WebSocket
+	r.Handle("/ws", middleware.JWTMiddleware(http.HandlerFunc(handlers.HandleWebSocket)))
+
+	r.Handle("/send-notification", middleware.JWTMiddleware(http.HandlerFunc(handlers.SendNotificationHandler))).Methods("POST")
+
 	///gli endpoint per registrazione e login sono pubblici: non richiedono che
 	///l'utente sia già autenticato, perché sono il punto di ingresso per ottenere
 	///il token. Invece, le operazioni che modificano dati sensibili (cambio email,

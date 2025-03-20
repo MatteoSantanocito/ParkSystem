@@ -31,7 +31,7 @@ func GetAttrazioniHandler(db *sql.DB) http.HandlerFunc {
 // fetchAttrazioni esegue la query al database e restituisce una lista di attrazioni.
 func fetchAttrazioni(db *sql.DB) ([]models.Attrazione, error) {
 	// Utilizzo di SELECT * per semplificare la query
-	query := `SELECT id_attrazione, nome, descrizione, tipologia, tematica, eta_minima, stato, capacita_oraria FROM attrazioni`
+	query := `SELECT id_attrazione, nome, descrizione, tipologia, tematica, eta_minima, stato, capacita_oraria FROM attrazioni WHERE stato = 'attiva'`
 	rows, err := db.Query(query)
 	if err != nil {
 		return nil, err
