@@ -82,6 +82,12 @@ namespace ParkSystemApp
             await Shell.Current.GoToAsync(nameof(Profilo), false);
         }
 
+        private async void OnFriendshipClicked(object sender, EventArgs e)
+        {
+            await Shell.Current.GoToAsync("///FriendshipPage");
+        }
+
+
 
 
     }

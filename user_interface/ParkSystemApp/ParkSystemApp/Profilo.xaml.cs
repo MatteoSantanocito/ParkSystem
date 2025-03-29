@@ -47,6 +47,12 @@ namespace ParkSystemApp
             await Shell.Current.GoToAsync("ChangeEmailPage");
         }
 
+        private async void OnAddPeopleClicked(object sender, EventArgs e)
+        {
+            // Naviga a pagina aggiungi amici
+            await Shell.Current.GoToAsync($"//{nameof(FriendshipPage)}", false);
+        }
+
         private async void OnChangePasswordClicked(object sender, EventArgs e)
         {
             // Naviga a pagina cambio password

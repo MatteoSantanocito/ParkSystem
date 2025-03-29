@@ -19,5 +19,8 @@
         <ShellContent Title="Registrazione"
                       ContentTemplate="{DataTemplate local:Registrazione}"
                       Route="Registrazione"/>
+        <ShellContent Route="FriendshipPage" 
+                      ContentTemplate="{DataTemplate local:FriendshipPage}" />
+
 
 </Shell>
