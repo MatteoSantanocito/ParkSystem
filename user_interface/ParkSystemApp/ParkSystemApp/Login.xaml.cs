@@ -31,19 +31,30 @@ namespace ParkSystemApp
                 // Esegui la chiamata all'endpoint di login
                 var result = await _apiService.LoginAsync(email, password);
 
-                // Se la stringa ritornata inizia con "Errore", mostriamo l'errore
-                if (result.StartsWith("Errore"))
+                // Controlla se c'è un messaggio di errore
+                if (!string.IsNullOrEmpty(result.ErrorMessage))
                 {
-                    await DisplayAlert("Errore", result, "OK");
+                    await DisplayAlert("Errore", result.ErrorMessage, "OK");
                     return;
                 }
 
                 // Altrimenti significa che il login è riuscito e abbiamo un token
                 await DisplayAlert("Successo", "Login effettuato con successo", "OK");
 
-                // Navigazione usando rotta “assoluta” di Shell: //MainPage
-                await Shell.Current.GoToAsync($"//{nameof(MainPage)}");
+                // Distingui in base al tipo di utente e naviga alla pagina corrispondente
+                if (result.UserType == "visitatore")
+                {
+                    // Navigazione alla pagina MainPage per gli utenti normali
+                    await Shell.Current.GoToAsync($"//{nameof(MainPage)}");
+                
+                }
+                else
+                {
+                    // Navigazione alla pagina MainPageAdmin per gli amministratori
+                    await Shell.Current.GoToAsync($"//{nameof(MainPageAdmin)}");
+
             }
+        }
 
 
         private async void Button_Clicked(object sender, EventArgs e)

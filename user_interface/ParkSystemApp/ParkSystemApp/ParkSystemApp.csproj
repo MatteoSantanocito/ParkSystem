@@ -68,10 +68,25 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Update="AttrazionePageAdmin.xaml.cs">
+	    <DependentUpon>AttrazionePageAdmin.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="MainPageAdmin.xaml.cs">
+	    <DependentUpon>MainPageAdmin.xaml</DependentUpon>
+	  </Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <MauiXaml Update="AttrazionePageAdmin.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="AttrazionePage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Login.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="MainPageAdmin.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Registrazione.xaml">

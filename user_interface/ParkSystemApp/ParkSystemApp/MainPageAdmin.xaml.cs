@@ -9,14 +9,13 @@ using Microsoft.Maui.Devices;
 
 namespace ParkSystemApp
 {
-    public partial class MainPage : ContentPage
+    public partial class MainPageAdmin : ContentPage
     {
-        private WebSocketClient _webSocketClient = new WebSocketClient();
         private ApiService _apiService; // Aggiungi una dipendenza al tuo ApiService
         public ObservableCollection<Attrazione> Attrazioni { get; set; }
         public Command<Attrazione> OpenDetailCommand { get; private set; }
 
-        public MainPage()
+        public MainPageAdmin()
         {
             InitializeComponent();
             Attrazioni = new ObservableCollection<Attrazione>();
@@ -25,28 +24,7 @@ namespace ParkSystemApp
             _apiService = new ApiService(); // Inizializza ApiService
             CaricaDati();
             OpenDetailCommand = new Command<Attrazione>(ExecuteOpenDetailCommand);
-            ConnectWebSocket();
 
-        }
-
-        // Metodo per richiedere la possibilita di mandare notifiche push
-        protected override async void OnAppearing()
-        {
-            base.OnAppearing();
-
-            var status = await Permissions.CheckStatusAsync<Permissions.PostNotifications>();
-            if (status != PermissionStatus.Granted)
-            {
-                status = await Permissions.RequestAsync<Permissions.PostNotifications>();
-            }
-        }
-
-        private async void ConnectWebSocket()
-        {
-            // Assicurati di usare l'URL corretto per l'emulatore
-            var uri = new Uri("ws://10.0.2.2:8080/ws");
-
-            await _webSocketClient.ConnectAsync(uri);
         }
 
         private async void ExecuteOpenDetailCommand(Attrazione attrazione)
@@ -55,7 +33,7 @@ namespace ParkSystemApp
         {
             { "attrazione", attrazione }
         };
-            await Shell.Current.GoToAsync(nameof(AttrazionePage), navigationParameters);
+            await Shell.Current.GoToAsync($"//{nameof(AttrazionePageAdmin)}", navigationParameters);
         }
 
 

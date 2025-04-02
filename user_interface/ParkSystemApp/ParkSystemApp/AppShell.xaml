@@ -10,14 +10,23 @@
     
     >
 
+        <ShellContent Title="MainAdmin"
+                      ContentTemplate="{DataTemplate local:MainPageAdmin}"
+                      Route="MainPageAdmin" />
+    
         <ShellContent Title="Main"
                       ContentTemplate="{DataTemplate local:MainPage}"
                       Route="MainPage" />
+    
         <ShellContent Title="Login"
                       ContentTemplate="{DataTemplate local:Login}"
                       Route="Login"/>
-        <ShellContent Title="Registrazione"
-                      ContentTemplate="{DataTemplate local:Registrazione}"
-                      Route="Registrazione"/>
 
+        <ShellContent Title="Registrazione"
+                          ContentTemplate="{DataTemplate local:Registrazione}"
+                          Route="Registrazione"/>
+
+        <ShellContent Title="AttrazioneAdmin"
+                      ContentTemplate="{DataTemplate local:AttrazionePageAdmin}"
+                      Route="AttrazionePageAdmin"/>
 </Shell>

@@ -2,7 +2,7 @@
 
 INSERT INTO utenti (nome, cognome, email, password_hash, tipo_utente, codice_amico, tipo_avventura)
 VALUES
-('Admin', 'Park', 'admin@gmail.com', 'password', 'admin', 'CODICEADMIN01', 'Avventura');
+('Admin', 'Park', 'admin@gmail.com', '$2a$10$JwJkvkuWDBLQ5PQU.7wI6u4Y4Dc9OilG7kU', 'admin', 'CODICEADMIN01', 'Avventura');
 
 INSERT INTO utenti (nome, cognome, email, password_hash, tipo_utente, codice_amico, tipo_avventura)
 VALUES

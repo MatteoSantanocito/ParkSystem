@@ -26,7 +26,15 @@ namespace ParkSystemApp.Services
             };
         }
 
-        public async Task<string> LoginAsync(string email, string password)
+
+        public class LoginResult
+        {
+            public string Token { get; set; }
+            public string UserType { get; set; }
+            public string ErrorMessage { get; set; }
+        }
+
+        public async Task<LoginResult> LoginAsync(string email, string password)
         {
             try
             {
@@ -48,8 +56,9 @@ namespace ParkSystemApp.Services
                 if (!response.IsSuccessStatusCode)
                 {
                     var errorMessage = await response.Content.ReadAsStringAsync();
-                    return $"Errore: {errorMessage}";
+                    return new LoginResult { ErrorMessage = $"Errore: {errorMessage}" };
                 }
+
 
 
                 var json = await response.Content.ReadAsStringAsync();
@@ -70,14 +79,14 @@ namespace ParkSystemApp.Services
                     Preferences.Set("UserCognome", loginResponse.user.Cognome);
                     Preferences.Set("UserEmail", loginResponse.user.Email);
                     Preferences.Set("UserTipoAvventura", loginResponse.user.TipoAvventura);
+                    Console.WriteLine(loginResponse.user);
                 }
-                
-                return loginResponse.token;
+                return new LoginResult { Token = loginResponse.token, UserType = loginResponse.user.TipoUtente };
             }
             catch (Exception ex)
             {
                 var inner = ex.InnerException?.Message ?? "";
-                return $"Errore: {ex.Message} | InnerException: {inner}";
+                return new LoginResult { ErrorMessage = $"Errore: {ex.Message} | InnerException: {inner}" };
             }
         }
 
@@ -239,10 +248,9 @@ namespace ParkSystemApp.Services
             public UserInfo user { get; set; }
         }
 
-        
+
         private class UserInfo
         {
-            
             [JsonPropertyName("nome")]
             public string Nome { get; set; }
 
@@ -251,10 +259,14 @@ namespace ParkSystemApp.Services
 
             [JsonPropertyName("email")]
             public string Email { get; set; }
+
+            [JsonPropertyName("tipo_utente")]
+            public string TipoUtente { get; set; }
+
             [JsonPropertyName("tipo_avventura")]
             public string TipoAvventura { get; set; }
-           
         }
+
 
         public async Task<String> BookAttractionAsync(int id)
         {
@@ -330,7 +342,7 @@ namespace ParkSystemApp.Services
         }
 
 
-        public async Task<List<Attrazione>> GetAttrazioniAsync()
+        public async Task<List<Attrazione>> GetAttrazioniAsync(string tipoUtente)
         {
             try
             {
@@ -339,6 +351,12 @@ namespace ParkSystemApp.Services
                 {
                     string jsonResponse = await response.Content.ReadAsStringAsync();
                     List<Attrazione> attrazioni = JsonConvert.DeserializeObject<List<Attrazione>>(jsonResponse);
+                    if (tipoUtente == "visitatore") 
+                    {
+                        attrazioni = attrazioni.Where(a => a.State == "attiva").ToList();
+                        return attrazioni;
+                    }
+
                     return attrazioni;
                 }
                 else
