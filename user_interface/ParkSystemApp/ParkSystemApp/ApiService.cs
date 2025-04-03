@@ -32,7 +32,7 @@ namespace ParkSystemApp.Services
          public class UserInfo
         {
             public int Id { get; set; }
-            
+
             [JsonPropertyName("nome")]
             public string Nome { get; set; }
 
@@ -41,7 +41,10 @@ namespace ParkSystemApp.Services
 
             [JsonPropertyName("email")]
             public string Email { get; set; }
-            
+
+            [JsonPropertyName("tipo_utente")]
+            public string TipoUtente { get; set; }
+
             [JsonPropertyName("tipo_avventura")]
             public string TipoAvventura { get; set; }
         }
@@ -132,159 +135,86 @@ namespace ParkSystemApp.Services
         }
 
         public async Task<LoginResult> LoginAsync(string email, string password)
-        // Classe UserInfo unificata (spostata fuori da LoginResponse)
-         public class UserInfo
         {
-            public int Id { get; set; }
-            
-            [JsonPropertyName("nome")]
-            public string Nome { get; set; }
 
-            [JsonPropertyName("cognome")]
-            public string Cognome { get; set; }
-
-            [JsonPropertyName("email")]
-            public string Email { get; set; }
-            
-            [JsonPropertyName("tipo_avventura")]
-            public string TipoAvventura { get; set; }
-        }
-
-        public class FriendshipListResponse
-        {
-            public List<FriendInfo> Accepted { get; set; }
-            public List<PendingFriendRequest> Pending { get; set; }
-        }
-
-        public class FriendInfo
-        {
-            [JsonPropertyName("id_richiesta")]
-            public int IdRichiesta { get; set; }
-
-            [JsonPropertyName("full_name")]
-            public string FullName { get; set; }
-
-            [JsonPropertyName("tipo_avventura")]
-            public string TipoAvventura { get; set; }
-
-            [JsonPropertyName("amico_da")]
-            public string AmicoDa { get; set; }
-
-            [JsonPropertyName("data_accettazione")]
-            [JsonConverter(typeof(JsonDateTimeConverter))]
-            public DateTime DataAccettazione { get; set; }
-        }
-
-        public class JsonDateTimeConverter : JsonConverter<DateTime>
-        {
-            public override DateTime Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
-            {
-                if (reader.TokenType == JsonTokenType.String)
-                {
-                    if (DateTime.TryParse(reader.GetString(), out DateTime date))
-                    {
-                        return date;
-                    }
-                }
-                return DateTime.MinValue;
-            }
-
-            public override void Write(Utf8JsonWriter writer, DateTime value, JsonSerializerOptions options)
-            {
-                writer.WriteStringValue(value.ToString("o"));
-            }
-        }
-
-        public class PendingFriendRequest
-        {
-            [JsonPropertyName("id_richiesta")]
-            public int IdRichiesta { get; set; }
-
-            [JsonPropertyName("mittente_nome")]
-            public string MittenteNome { get; set; }
-
-            [JsonPropertyName("mittente_cognome")]
-            public string MittenteCognome { get; set; }
-
-            [JsonPropertyName("data_richiesta")]
-            [JsonConverter(typeof(JsonDateTimeConverter))]           
-            public DateTime DataRichiesta { get; set; }
-
-            [JsonIgnore]
-            public string FullName => $"{MittenteNome} {MittenteCognome}";
-
-            [JsonIgnore]
-            public string DataFormattata => 
-                DataRichiesta == DateTime.MinValue ? 
-                "Data non disponibile" : 
-                DataRichiesta.ToLocalTime().ToString("dd/MM/yyyy");
-        }
-
-        private class LoginResponse
-        {
-            public string token { get; set; }
-            public UserInfo user { get; set; }
-        }
-        
-
-        public async Task<string> LoginAsync(string email, string password)
-        {
             try
+
             {
                 var loginData = new
+
                 {
                     Email = email,
                     Password = password
+
                 };
+
 
                 var content = new StringContent(
                     System.Text.Json.JsonSerializer.Serialize(loginData),
                     Encoding.UTF8,
                     "application/json"
+
                 );
 
-                // Esempio: endpoint /login definito nel backend Go
+
                 var response = await _httpClient.PostAsync("/login", content);
 
                 if (!response.IsSuccessStatusCode)
+
                 {
+
                     var errorMessage = await response.Content.ReadAsStringAsync();
                     return new LoginResult { ErrorMessage = $"Errore: {errorMessage}" };
+
                 }
-
-
 
                 var json = await response.Content.ReadAsStringAsync();
+
                 var loginResponse = System.Text.Json.JsonSerializer.Deserialize<LoginResponse>(json);
 
-
-                // Se il token è presente, lo salviamo in SecureStorage
                 if (!string.IsNullOrEmpty(loginResponse?.token))
+
                 {
+
                     await SecureStorage.SetAsync("AuthToken", loginResponse.token);
-                    System.Diagnostics.Debug.WriteLine($"TOKEN PER POSTMAN: {loginResponse.token}");
 
                 }
-                
                 // Salviamo i dati utente in Preferences (così li carichiamo senza rifare query)
+
                 if (loginResponse.user != null)
+
                 {
+
                     Preferences.Set("UserName", loginResponse.user.Nome);
+
                     System.Diagnostics.Debug.WriteLine("UserName salvato: " + Preferences.Get("UserName", "vuoto"));
+
                     Preferences.Set("UserCognome", loginResponse.user.Cognome);
+
                     Preferences.Set("UserEmail", loginResponse.user.Email);
+
                     Preferences.Set("UserTipoAvventura", loginResponse.user.TipoAvventura);
+
+
                     Console.WriteLine(loginResponse.user);
+
                 }
+
                 return new LoginResult { Token = loginResponse.token, UserType = loginResponse.user.TipoUtente };
+
             }
+
             catch (Exception ex)
+
             {
                 var inner = ex.InnerException?.Message ?? "";
+
                 return new LoginResult { ErrorMessage = $"Errore: {ex.Message} | InnerException: {inner}" };
+
             }
+
         }
-       
+
         public async Task<string> RegisterAsync(string nome, string cognome, string tipoAvventura, string email, string password)
         {
             try
@@ -435,31 +365,6 @@ namespace ParkSystemApp.Services
             }
         }
 
-        private class LoginResponse
-        {
-            public string token { get; set; }
-            public UserInfo user { get; set; }
-        }
-
-
-        private class UserInfo
-        {
-            [JsonPropertyName("nome")]
-            public string Nome { get; set; }
-
-            [JsonPropertyName("cognome")]
-            public string Cognome { get; set; }
-
-            [JsonPropertyName("email")]
-            public string Email { get; set; }
-
-            [JsonPropertyName("tipo_utente")]
-            public string TipoUtente { get; set; }
-
-            [JsonPropertyName("tipo_avventura")]
-            public string TipoAvventura { get; set; }
-        }
-
 
         public async Task<String> BookAttractionAsync(int id)
         {
@@ -535,31 +440,51 @@ namespace ParkSystemApp.Services
         }
 
 
-        public async Task<List<Attrazione>> GetAttrazioniAsync()
+        public async Task<List<Attrazione>> GetAttrazioniAsync(string tipoUtente)
         {
+
             try
             {
                 HttpResponseMessage response = await _httpClient.GetAsync("/attrazioni");
+
                 if (response.IsSuccessStatusCode)
                 {
                     string jsonResponse = await response.Content.ReadAsStringAsync();
-                    List<Attrazione> attrazioni = JsonConvert.DeserializeObject<List<Attrazione>>(jsonResponse);
+                    var options = new JsonSerializerOptions
+                    {
+                        PropertyNameCaseInsensitive = true // ignora maiuscole/minuscole nei nomi dei campi
+                    };
+                    List<Attrazione> attrazioni = JsonSerializer.Deserialize<List<Attrazione>>(jsonResponse, options);
+
+                    if (tipoUtente == "visitatore")
+                    {
+                        attrazioni = attrazioni.Where(a => a.State == "attiva").ToList();
+                        return attrazioni;
+                    }
                     return attrazioni;
                 }
+
                 else
+
                 {
                     // Gestisci il caso in cui la risposta non sia successo
                     throw new Exception("Non è stato possibile recuperare le attrazioni");
                 }
             }
+
             catch (Exception ex)
+
             {
+
                 // Gestisci eventuali eccezioni
+
                 throw new Exception($"Errore durante il recupero delle attrazioni: {ex.Message}");
+
             }
+
         }
 
-            public async Task<String> SendRating(int attractionId, int rating)
+        public async Task<String> SendRating(int attractionId, int rating)
             {
                 var token = await SecureStorage.GetAsync("AuthToken");
                 if (string.IsNullOrEmpty(token))
@@ -686,15 +611,6 @@ namespace ParkSystemApp.Services
                 var token = await SecureStorage.GetAsync("AuthToken");
                 if (string.IsNullOrEmpty(token))
                 {
-                    string jsonResponse = await response.Content.ReadAsStringAsync();
-                    List<Attrazione> attrazioni = JsonConvert.DeserializeObject<List<Attrazione>>(jsonResponse);
-                    if (tipoUtente == "visitatore") 
-                    {
-                        attrazioni = attrazioni.Where(a => a.State == "attiva").ToList();
-                        return attrazioni;
-                    }
-
-                    return attrazioni;
                     return "Errore: Utente non autenticato";
                 }
 
