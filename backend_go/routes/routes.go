@@ -28,15 +28,23 @@ func SetupRoutes(db *sql.DB, jwtSecret string) *mux.Router {
 	r.Handle("/account/email", middleware.JWTMiddleware(handlers.UpdateEmailHandler(db))).Methods("PUT")
 	r.Handle("/account/password", middleware.JWTMiddleware(handlers.UpdatePasswordHandler(db))).Methods("PUT")
 	r.Handle("/account", middleware.JWTMiddleware(handlers.DeleteAccountHandler(db))).Methods("DELETE")
+
 	// Endpoint pubblici (non protetti) per ottenere informazioni sulle attrazioni
 	r.HandleFunc("/attrazioni", handlers.GetAttrazioniHandler(db)).Methods("GET")
 
 	r.Handle("/ratings", middleware.JWTMiddleware(handlers.PostRatingHandler(db))).Methods("POST")
 
-	// Aggiungi le route WebSocket
+	// route WebSocket
 	r.Handle("/ws", middleware.JWTMiddleware(http.HandlerFunc(handlers.HandleWebSocket)))
 
 	r.Handle("/send-notification", middleware.JWTMiddleware(http.HandlerFunc(handlers.SendNotificationHandler))).Methods("POST")
+
+	// endpoint per le richieste di amicizia protetti da JWT
+	r.Handle("/friendship/request", middleware.JWTMiddleware(http.HandlerFunc(handlers.SendFriendRequest(db)))).Methods("POST")
+	r.Handle("/friendship/accept", middleware.JWTMiddleware(http.HandlerFunc(handlers.AcceptFriendRequest(db)))).Methods("PUT")
+	r.Handle("/friendship/reject", middleware.JWTMiddleware(http.HandlerFunc(handlers.RejectFriendRequest(db)))).Methods("PUT")
+	r.Handle("/friendship/list", middleware.JWTMiddleware(http.HandlerFunc(handlers.ListFriendships(db)))).Methods("GET")
+	r.Handle("/friendship/search", middleware.JWTMiddleware(http.HandlerFunc(handlers.SearchUserHandler(db)))).Methods("GET")
 
 	///gli endpoint per registrazione e login sono pubblici: non richiedono che
 	///l'utente sia già autenticato, perché sono il punto di ingresso per ottenere

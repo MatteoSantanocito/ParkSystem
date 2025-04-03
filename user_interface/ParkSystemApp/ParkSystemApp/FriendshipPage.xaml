@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage 
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:ParkSystemApp"
+    x:Class="ParkSystemApp.FriendshipPage"
+    Title="Amicizie"
+    BackgroundColor="White">
+    
+    <Grid RowDefinitions="Auto,*,Auto">
+        <!-- Header -->
+        <Border
+            Grid.Row="0"
+            BackgroundColor="#F4A7A3"
+            Padding="20"
+            HeightRequest="100"
+            HorizontalOptions="FillAndExpand"
+            VerticalOptions="Start">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="0,0,20,20" />
+            </Border.StrokeShape>
+            <Grid>
+                <Label Text="Le tue amicizie"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center"
+                       FontSize="25"
+                       FontAttributes="Bold"
+                       TextColor="Black" />
+            </Grid>
+        </Border>
+
+        
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Margin="20" Spacing="20">
+                <!-- Sezione ricerca con campo input e pulsante -->
+                 <Frame 
+                    BorderColor="#F4A7A3" 
+                    CornerRadius="30" 
+                    Padding="20"
+                    BackgroundColor="White">
+                    
+                    <VerticalStackLayout Spacing="20">
+                        <!-- Titolo sezione -->
+                        <Label 
+                            Text="Inserisci codice amico"
+                            FontAttributes="Bold"
+                            FontSize="16" 
+                            HorizontalOptions="Center"
+                            TextColor="Black"/>
+                        
+                        
+                        <Entry 
+                            x:Name="FriendCodeEntry"
+                            Placeholder="Esempio: eDOG-erjO-sJVr" 
+                            Margin="0,10,0,0"
+                            BackgroundColor="White"
+                            TextColor="Black"
+                            ClearButtonVisibility="WhileEditing"
+                            HeightRequest="45"/>
+                        
+                        <!-- Pulsante cerca -->
+                        <Button 
+                            Text="CERCA AMICO"
+                            Margin="0,10,0,0"
+                            TextColor="White"
+                            BackgroundColor="#F4A7A3"
+                            HeightRequest="45"
+                            CornerRadius="20"
+                            Clicked="OnSearchButtonClicked"/>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Risultato della ricerca -->
+                <Frame x:Name="SearchResultFrame" 
+                       IsVisible="False" 
+                       CornerRadius="20" 
+                       Padding="15"
+                       BorderColor="#F4A7A3">
+                    <Grid ColumnDefinitions="*,Auto">
+                        <VerticalStackLayout>
+                            <Label x:Name="SearchResultLabel" 
+                                   FontAttributes="Bold"
+                                   FontSize="16"/>
+                            <Label x:Name="SearchResultSubLabel" 
+                                   TextColor="Gray"
+                                   FontSize="14"/>
+                        </VerticalStackLayout>
+                        <Button Text="+" 
+                                Clicked="OnAddFriendClicked" 
+                                BackgroundColor="#F4A7A3"
+                                TextColor="White"
+                                FontAttributes="Bold"
+                                CornerRadius="20"
+                                Margin="290,0,0,0"
+                                Padding="0,0,0,0"/>
+                    </Grid>
+                </Frame>
+
+                <!-- Sezione Amici accettati -->
+                <Label Text="I tuoi amici:" 
+                       FontAttributes="Bold" 
+                       FontSize="16"
+                       TextColor="#F4A7A3"/>
+                <CollectionView x:Name="AcceptedFriendsCollectionView">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Frame CornerRadius="20" 
+                                   Padding="15" 
+                                   Margin="0,5" 
+                                   BorderColor="#F4A7A3"
+                                   BackgroundColor="#FFF5F5">
+                                <VerticalStackLayout>
+                                    <Label Text="{Binding FullName}" 
+                                           FontAttributes="Bold"
+                                           FontSize="16"/>
+                                    <Label Text="{Binding TipoAvventura}" 
+                                           FontSize="14"/>
+                                    <Label Text="{Binding AmicoDa}" 
+                                           FontSize="12" 
+                                           TextColor="Gray" />
+                                </VerticalStackLayout>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+                <!-- Sezione Richieste in sospeso -->
+                <Label Text="Richieste in sospeso:" 
+                       FontAttributes="Bold" 
+                       FontSize="16"
+                       TextColor="#F4A7A3"/>
+                <CollectionView x:Name="PendingRequestsCollectionView">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Frame CornerRadius="20" Padding="15" Margin="0,5"
+                                BorderColor="#F4A7A3" BackgroundColor="#FFF5F5">
+                                <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="10">
+                                    <!-- Dettagli richiesta -->
+                                    <VerticalStackLayout Grid.Column="0">
+                                        <Label Text="{Binding FullName}" 
+                                            FontAttributes="Bold" FontSize="16"/>
+                                        <Label Text="{Binding DataRichiesta, StringFormat='{0:dd/MM/yyyy}'}" 
+                                            FontSize="12" TextColor="Gray"/>
+                                    </VerticalStackLayout>
+                                    
+                                    <!-- Bottoni -->
+                                    <Button Grid.Column="1" Text="✓" 
+                                            CommandParameter="{Binding IdRichiesta}"
+                                            Clicked="OnAcceptRequestClicked"
+                                            BackgroundColor="#4CAF50"
+                                            WidthRequest="40" HeightRequest="40"/>
+                                            
+                                    <Button Grid.Column="2" Text="✕" 
+                                            CommandParameter="{Binding IdRichiesta}"
+                                            Clicked="OnRejectRequestClicked"
+                                            BackgroundColor="#F44336"
+                                            WidthRequest="40" HeightRequest="40"/>
+                                </Grid>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+
+                <Label x:Name="NoPendingLabel" 
+                       Text="Nessuna richiesta in sospeso" 
+                       IsVisible="False" 
+                       HorizontalOptions="Center" 
+                       TextColor="Gray" />
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <!-- Nav Bar inferiore -->
+        <Grid Grid.Row="2" BackgroundColor="#F4A7A3" Padding="10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="0" 
+                    Text="&#xe88a;" 
+                    FontFamily="MaterialIcons"
+                    FontSize="20"
+                    TextColor="Black"
+                    BackgroundColor="Transparent"
+                    Clicked="OnBackToMainPageClicked" />
+            <Button Grid.Column="1" 
+                    Text="&#xe838;" 
+                    FontFamily="MaterialIcons"
+                    FontSize="20"
+                    TextColor="Black"
+                    BackgroundColor="Transparent" />
+            <Button Grid.Column="2" 
+                    Text="&#xe7fe;" 
+                    FontFamily="MaterialIcons"
+                    FontSize="20"
+                    TextColor="Black"
+                    BackgroundColor="Transparent" />
+            <Button Grid.Column="3" 
+                    Text="&#xe8b8;" 
+                    FontFamily="MaterialIcons"
+                    FontSize="20"
+                    TextColor="Black"
+                    BackgroundColor="Transparent"
+                    Clicked="OnProfileClicked"/>    
+            
+        </Grid>
+    </Grid>
+</ContentPage>

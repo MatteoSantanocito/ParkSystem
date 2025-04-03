@@ -133,6 +133,7 @@
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <Button Grid.Column="0"
                     Text="&#xe88a;"
@@ -149,7 +150,15 @@
                     BackgroundColor="Transparent"
                      />
             <Button Grid.Column="2"
-                    Text="&#xe7fd;"
+                    Text="&#xe7fe;"
+                    FontFamily="MaterialIcons"
+                    FontSize="20"
+                    TextColor="Black"
+                    BackgroundColor="Transparent"
+                    Clicked="OnAddPeopleClicked"
+                     />
+            <Button Grid.Column="3"
+                    Text="&#xe8b8;"
                     FontFamily="MaterialIcons"
                     FontSize="20"
                     TextColor="Black"
