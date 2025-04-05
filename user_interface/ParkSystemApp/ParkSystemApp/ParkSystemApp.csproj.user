@@ -6,6 +6,7 @@
     <ActiveDebugProfile>Pixel 7 - API 35 (15.0 Android - API 35)</ActiveDebugProfile>
     <SelectedPlatformGroup>Emulator</SelectedPlatformGroup>
     <DefaultDevice>pixel_7_-_api_35</DefaultDevice>
+    <SelectedDevice>pixel_7_-_api_35</SelectedDevice>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net9.0-android|AnyCPU'">
     <DebuggerFlavor>ProjectDebugger</DebuggerFlavor>
@@ -17,10 +18,16 @@
     <MauiXaml Update="AttrazionePage.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
+    <MauiXaml Update="CreaAttrazionePage.xaml">
+      <SubType>Designer</SubType>
+    </MauiXaml>
     <MauiXaml Update="Login.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
     <MauiXaml Update="MainPageAdmin.xaml">
+      <SubType>Designer</SubType>
+    </MauiXaml>
+    <MauiXaml Update="ProfiloAdmin.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
     <MauiXaml Update="Registrazione.xaml">

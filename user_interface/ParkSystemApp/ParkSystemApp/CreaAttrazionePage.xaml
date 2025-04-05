@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ParkSystemApp.CreaAttrazionePage"
+             Title="CreaAttrazionePage"
+             BackgroundColor="#D99B9B">
+
+
+    <Grid RowDefinitions="Auto,*,Auto">
+
+        <!-- Riga 0: Barra superiore -->
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <Label WidthRequest="50"
+                   HeightRequest="50"
+                   VerticalOptions="Center"
+                   HorizontalOptions="Start" />
+
+            <Label Text="Park System"
+                   Grid.Column="1"
+                   HorizontalOptions="Center"
+                   VerticalOptions="Center"
+                   FontSize="24"
+                   FontAttributes="Bold"
+                   TextColor="Black"
+                   FontFamily="SawarabiGothic"/>
+
+            <Label WidthRequest="50"
+                   HeightRequest="50"
+                   Grid.Column="2"
+                   VerticalOptions="Center"
+                   HorizontalOptions="End" />
+        </Grid>
+
+        <!-- Riga 1: Form con campi attrazione -->
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Padding="20" Spacing="15">
+                <Entry Placeholder="Nome" Text="{Binding Nome}" />
+                <Editor Placeholder="Descrizione" Text="{Binding Descrizione}" AutoSize="TextChanges" />
+                <Entry Placeholder="Tipologia" Text="{Binding Tipologia}" />
+                <Entry Placeholder="Tematica" Text="{Binding Tematica}" />
+                <Entry Placeholder="Età minima" Keyboard="Numeric" Text="{Binding MinimumAge}" />
+                <Entry Placeholder="Stato (es. Attiva/Chiusa)" Text="{Binding State}" />
+                <Entry Placeholder="Capienza oraria" Keyboard="Numeric" Text="{Binding HourCapacity}" />
+
+                <Button Text="Salva"
+                        BackgroundColor="#F4A7A3"
+                        TextColor="White"
+                        FontAttributes="Bold"
+                        Clicked="OnSalvaClicked" />
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <!-- Riga 2: Barra di navigazione inferiore -->
+        <Grid Grid.Row="2" VerticalOptions="End">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="0"
+            Text="&#xe88a;"
+            FontFamily="MaterialIcons"
+            FontSize="20"
+            TextColor="Black"
+            BackgroundColor="Transparent"
+            Clicked="OnBackToMainPageClicked" />
+            <Button Grid.Column="1"
+            Text="&#xe838;"
+            FontFamily="MaterialIcons"
+            FontSize="20"
+            TextColor="Black"
+            BackgroundColor="Transparent"/>
+            <Button Grid.Column="2"
+            Text="&#xe7fd;"
+            FontFamily="MaterialIcons"
+            FontSize="20"
+            TextColor="Black"
+            BackgroundColor="Transparent"
+            Clicked="OnProfileClicked"/>
+        </Grid>
+
+    </Grid>
+</ContentPage>

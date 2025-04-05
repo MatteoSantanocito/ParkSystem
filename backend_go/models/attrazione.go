@@ -13,3 +13,7 @@ type Attrazione struct {
 	State        string `json:"state"`        // corrisponde a stato
 	HourCapacity int    `json:"hourCapacity"` // corrisponde a capacita_oraria
 }
+
+type DeleteAttrazioneRequest struct {
+	ID int `json:"id"`
+}

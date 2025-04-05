@@ -1,19 +1,21 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-                xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-                x:Class="ParkSystemApp.Profilo"
-                Title="Profilo"
-                BackgroundColor="White">
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ParkSystemApp.ProfiloAdmin"
+             Title="ProfiloAdmin"
+             BackgroundColor="White">
+
+
 
     <Grid RowDefinitions="Auto,*,Auto">
         <!-- TOP BAR con bordi inferiori arrotondati, senza il bottone back -->
         <Border
-            Grid.Row="0"
-            BackgroundColor="#F4A7A3"
-            Padding="20"
-            HeightRequest="100"
-            HorizontalOptions="FillAndExpand"
-            VerticalOptions="Start">
+        Grid.Row="0"
+        BackgroundColor="#F4A7A3"
+        Padding="20"
+        HeightRequest="100"
+        HorizontalOptions="FillAndExpand"
+        VerticalOptions="Start">
             <!-- Arrotondamento dei soli angoli inferiori -->
             <Border.StrokeShape>
                 <RoundRectangle CornerRadius="0,0,20,20" />
@@ -21,13 +23,13 @@
             <!-- Titolo centrato -->
             <Grid>
                 <Label
-                    x:Name="WelcomeLabel"
-                    Text="Benvenuto, "
-                    HorizontalOptions="Start"
-                    VerticalOptions="Center"
-                    FontSize="25"
-                    FontAttributes="Bold"
-                    TextColor="Black" />
+                x:Name="WelcomeLabel"
+                Text="Benvenuto, "
+                HorizontalOptions="Start"
+                VerticalOptions="Center"
+                FontSize="25"
+                FontAttributes="Bold"
+                TextColor="Black" />
             </Grid>
         </Border>
 
@@ -39,8 +41,8 @@
                 <Frame BorderColor="#F4A7A3" CornerRadius="30" Padding="20">
                     <VerticalStackLayout Spacing="20">
                         <Label Text="Informazioni account"
-                               FontSize="14"
-                               FontAttributes="Bold" />
+                           FontSize="14"
+                           FontAttributes="Bold" />
 
                         <!-- Email + freccia -->
                         <Grid ColumnSpacing="10">
@@ -55,14 +57,11 @@
                             </VerticalStackLayout>
 
                             <Label Text="&#xe5cc;" 
-                                   FontFamily="MaterialIcons"
-                                   FontSize="24"
-                                   TextColor="Black"
-                                   HorizontalOptions="End"
-                                   VerticalOptions="Center">
-                                <Label.GestureRecognizers>
-                                    <TapGestureRecognizer Tapped="OnChangeEmailClicked" />
-                                </Label.GestureRecognizers>
+                               FontFamily="MaterialIcons"
+                               FontSize="24"
+                               TextColor="Black"
+                               HorizontalOptions="End"
+                               VerticalOptions="Center">
                             </Label>
                         </Grid>
 
@@ -79,14 +78,11 @@
                             </VerticalStackLayout>
 
                             <Label Text="&#xe5cc;" 
-                                   FontFamily="MaterialIcons"
-                                   FontSize="24"
-                                   TextColor="Black"
-                                   HorizontalOptions="End"
-                                   VerticalOptions="Center">
-                                <Label.GestureRecognizers>
-                                    <TapGestureRecognizer Tapped="OnChangePasswordClicked" />
-                                </Label.GestureRecognizers>
+                               FontFamily="MaterialIcons"
+                               FontSize="24"
+                               TextColor="Black"
+                               HorizontalOptions="End"
+                               VerticalOptions="Center">
                             </Label>
                         </Grid>
                     </VerticalStackLayout>
@@ -96,8 +92,8 @@
                 <Frame BorderColor="#F4A7A3" CornerRadius="30" Padding="20">
                     <VerticalStackLayout Spacing="10">
                         <Label Text="Informazioni personali"
-                               FontSize="16"
-                               FontAttributes="Bold" />
+                           FontSize="16"
+                           FontAttributes="Bold" />
                         <Label Text="Nome" FontSize="14" />
                         <Label x:Name="NomeValLabel" FontSize="14"  />
                         <BoxView HeightRequest="1" BackgroundColor="#F4A7A3" />
@@ -113,16 +109,16 @@
 
                 <!-- Bottone Logout (stesso colore della top bar) -->
                 <Button Text="Logout"
-                        Clicked="OnLogoutClicked"
-                        TextColor="Black"
-                        BackgroundColor="#F4A7A3"
-                        FontAttributes="Bold" />
+                    Clicked="OnLogoutClicked"
+                    TextColor="Black"
+                    BackgroundColor="#F4A7A3"
+                    FontAttributes="Bold" />
 
                 <!-- Pulsante per Elimina Account -->
                 <Button Text="Elimina Account"
-                        TextColor="White"
-                        BackgroundColor="Red"
-                        Clicked="OnEliminaAccountClicked"/>
+                    TextColor="White"
+                    BackgroundColor="Red"
+                    Clicked="OnEliminaAccountClicked"/>
             </VerticalStackLayout>
         </ScrollView>
 
@@ -132,37 +128,28 @@
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <Button Grid.Column="0"
-                    Text="&#xe88a;"
-                    FontFamily="MaterialIcons"
-                    FontSize="20"
-                    TextColor="Black"
-                    BackgroundColor="Transparent"
-                    Clicked="OnBackToMainPageClicked" />
+                Text="&#xe88a;"
+                FontFamily="MaterialIcons"
+                FontSize="20"
+                TextColor="Black"
+                BackgroundColor="Transparent"
+                Clicked="OnBackToMainPageClicked" />
             <Button Grid.Column="1"
-                    Text="&#xe838;"
-                    FontFamily="MaterialIcons"
-                    FontSize="20"
-                    TextColor="Black"
-                    BackgroundColor="Transparent"
-                     />
-            <Button Grid.Column="2"
-                    Text="&#xe7fe;"
-                    FontFamily="MaterialIcons"
-                    FontSize="20"
-                    TextColor="Black"
-                    BackgroundColor="Transparent"
-                    Clicked="OnAddPeopleClicked"
-                     />
+                Text="&#xe838;"
+                FontFamily="MaterialIcons"
+                FontSize="20"
+                TextColor="Black"
+                BackgroundColor="Transparent"
+                 />
             <Button Grid.Column="3"
-                    Text="&#xe8b8;"
-                    FontFamily="MaterialIcons"
-                    FontSize="20"
-                    TextColor="Black"
-                    BackgroundColor="Transparent"
-                    />
+                Text="&#xe8b8;"
+                FontFamily="MaterialIcons"
+                FontSize="20"
+                TextColor="Black"
+                BackgroundColor="Transparent"
+                />
         </Grid>
     </Grid>
 </ContentPage>

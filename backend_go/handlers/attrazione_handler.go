@@ -49,3 +49,82 @@ func fetchAttrazioni(db *sql.DB) ([]models.Attrazione, error) {
 	}
 	return attrazioni, nil
 }
+
+func InsertAttrazioneHandler(db *sql.DB) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		var attr models.Attrazione
+		if err := json.NewDecoder(r.Body).Decode(&attr); err != nil {
+			http.Error(w, "Errore nella lettura dell'attrazione: "+err.Error(), http.StatusBadRequest)
+			return
+		}
+
+		// Insert into the database
+		query := `INSERT INTO attrazioni (nome, descrizione, tipologia, tematica, eta_minima, stato, capacita_oraria) VALUES ($1, $2, $3, $4, $5, $6, $7)`
+		_, err := db.Exec(query, attr.Nome, attr.Descrizione, attr.Tipologia, attr.Tematica, attr.MinimumAge, attr.State, attr.HourCapacity)
+		if err != nil {
+			log.Printf("Errore durante l'inserimento dell'attrazione: %v", err)
+			http.Error(w, "Errore durante l'inserimento nel database", http.StatusInternalServerError)
+			return
+		}
+
+		w.WriteHeader(http.StatusCreated)
+		w.Write([]byte("Attrazione inserita con successo"))
+	}
+}
+
+func UpdateAttrazioneHandler(db *sql.DB) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		var attrazione models.Attrazione
+
+		// Decodifica del body
+		if err := json.NewDecoder(r.Body).Decode(&attrazione); err != nil {
+			http.Error(w, "Dati non validi", http.StatusBadRequest)
+			return
+		}
+
+		// Query per aggiornare l’attrazione
+		_, err := db.Exec(`
+		UPDATE attrazioni 
+		SET 
+			nome = $1, 
+			descrizione = $2, 
+			tipologia = $3, 
+			tematica = $4, 
+			eta_minima = $5, 
+			stato = $6, 
+			capacita_oraria = $7
+		WHERE id_attrazione = $8`, attrazione.Nome, attrazione.Descrizione, attrazione.Tipologia,
+			attrazione.Tematica, attrazione.MinimumAge, attrazione.State,
+			attrazione.HourCapacity, attrazione.ID)
+
+		if err != nil {
+			http.Error(w, "Errore aggiornamento attrazione", http.StatusInternalServerError)
+			return
+		}
+
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"message": "Attrazione aggiornata con successo"}`))
+	}
+}
+
+func DeleteAttrazioneHandler(db *sql.DB) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		var req models.DeleteAttrazioneRequest
+
+		// Decodifica del body JSON
+		if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+			http.Error(w, "Dati non validi", http.StatusBadRequest)
+			return
+		}
+
+		// Esegue la cancellazione
+		_, err := db.Exec(`DELETE FROM attrazioni WHERE id_attrazione = $1`, req.ID)
+		if err != nil {
+			http.Error(w, "Errore durante l'eliminazione", http.StatusInternalServerError)
+			return
+		}
+
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"message": "Attrazione eliminata con successo"}`))
+	}
+}

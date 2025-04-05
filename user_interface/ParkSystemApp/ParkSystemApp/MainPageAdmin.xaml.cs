@@ -27,6 +27,7 @@ namespace ParkSystemApp
 
         }
 
+        /*
         private async void ExecuteOpenDetailCommand(Attrazione attrazione)
         {
             var navigationParameters = new Dictionary<string, object>
@@ -34,7 +35,20 @@ namespace ParkSystemApp
             { "attrazione", attrazione }
         };
             await Shell.Current.GoToAsync($"//{nameof(AttrazionePageAdmin)}", navigationParameters);
+        } */
+
+        private async void ExecuteOpenDetailCommand(Attrazione attrazione)
+        {
+            await Navigation.PushAsync(new AttrazionePageAdmin(attrazione, idEliminato =>
+            {
+                var item = Attrazioni.FirstOrDefault(a => a.ID == idEliminato);
+                if (item != null)
+                {
+                    Attrazioni.Remove(item);
+                }
+            }));
         }
+
 
 
         private async void CaricaDati()
@@ -58,8 +72,14 @@ namespace ParkSystemApp
         private async void OnProfileClicked(object sender, EventArgs e)
         {
             // Naviga alla pagina di registrazione
-            await Shell.Current.GoToAsync(nameof(Profilo), false);
+            await Shell.Current.GoToAsync("//ProfiloAdmin", false);
         }
+
+        private async void OnCreateTapped(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new CreaAttrazionePage());
+        }
+
 
 
 

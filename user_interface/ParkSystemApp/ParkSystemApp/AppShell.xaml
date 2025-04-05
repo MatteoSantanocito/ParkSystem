@@ -33,4 +33,8 @@
         <ShellContent Title="AttrazioneAdmin"
                       ContentTemplate="{DataTemplate local:AttrazionePageAdmin}"
                       Route="AttrazionePageAdmin"/>
+
+        <ShellContent Title="ProfiloAdmin"
+                      ContentTemplate="{DataTemplate local:ProfiloAdmin}"
+                      Route="ProfiloAdmin" />
 </Shell>

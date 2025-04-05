@@ -4,58 +4,167 @@
              Title="AttrazionePageAdmin"
              BackgroundColor="#D99B9B">
 
-    <Grid RowDefinitions="3*, 1*">
+    <Grid RowDefinitions="6*,1*,1*">
         <!-- Grid per le informazioni della giostra -->
         <ScrollView Grid.Row="0">
-            <VerticalStackLayout Padding="20">
-                <Label Text="{Binding Nome}"
-                       FontSize="45"
-                       HorizontalOptions="Center"
-                       Padding="10"/>
-                <Image Source="{Binding ImagePath}"
-                       HorizontalOptions="Center"
-                       HeightRequest="200"
-                       WidthRequest="200"/>
-                <Label Text="{Binding Descrizione}"
-                       FontSize="25"
-                       HorizontalOptions="Center"
-                       Padding="0,10,0,10"/>
-                <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Padding="10">
-                    <Label Text="Tipologia: "
-                           FontSize="25"/>
-                    <Label Text="{Binding Tipologia}"
-                           FontSize="25"/>
-                </StackLayout>
-                <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Padding="10">
-                    <Label Text="Tematica: "
-                           FontSize="25"/>
-                    <Label Text="{Binding Tematica}"
-                           FontSize="25"/>
-                </StackLayout>
-                <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Padding="10">
-                    <Label Text="Eta minima: "
-                           FontSize="25"/>
-                    <Label Text="{Binding MinimumAge}"
-                           FontSize="25"/>
-                </StackLayout>
-                <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Padding="10">
-                    <Label Text="Stato Attrazione: "
-                           FontSize="25"/>
-                    <Label Text="{Binding State}"
-                           FontSize="25"/>
-                </StackLayout>
-                <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Padding="10">
-                    <Label Text="Capacita oraria: "
-                           FontSize="25"/>
-                    <Label Text="{Binding HourCapacity}"
-                           FontSize="25"/>
-                </StackLayout>
-            </VerticalStackLayout>
+            <Grid>
+                <VerticalStackLayout Padding="20" x:Name="LabelModeLayout" IsVisible="True">
+                    <Label Text="{Binding Nome}"
+                           FontSize="45"
+                           HorizontalOptions="Center"
+                           Padding="10"/>
+                    <Image Source="{Binding ImagePath}"
+                           HorizontalOptions="Center"
+                           HeightRequest="200"
+                           WidthRequest="200"/>
+                    <Label Text="{Binding Descrizione}"
+                           FontSize="25"
+                           HorizontalOptions="Center"
+                           Padding="0,10,0,10"/>
+                    <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Padding="10">
+                        <Label Text="Tipologia: "
+                               FontSize="25"/>
+                        <Label Text="{Binding Tipologia}"
+                               FontSize="25"/>
+                    </StackLayout>
+                    <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Padding="10">
+                        <Label Text="Tematica: "
+                               FontSize="25"/>
+                        <Label Text="{Binding Tematica}"
+                               FontSize="25"/>
+                    </StackLayout>
+                    <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Padding="10">
+                        <Label Text="Eta minima: "
+                               FontSize="25"/>
+                        <Label Text="{Binding MinimumAge}"
+                               FontSize="25"/>
+                    </StackLayout>
+                    <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Padding="10">
+                        <Label Text="Stato Attrazione: "
+                               FontSize="25"/>
+                        <Label Text="{Binding State}"
+                               FontSize="25"/>
+                    </StackLayout>
+                    <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Padding="10">
+                        <Label Text="Capacita oraria: "
+                               FontSize="25"/>
+                        <Label Text="{Binding HourCapacity}"
+                               FontSize="25"/>
+                    </StackLayout>
+                </VerticalStackLayout>
+
+                <!-- Modalita MODIFICA -->
+                <VerticalStackLayout Padding="10" x:Name="EditModeLayout" IsVisible="False">
+                    <Entry Text="{Binding Nome}"
+                           FontSize="45"
+                           HorizontalOptions="Center"
+                           Placeholder="Nome attrazione"/>
+
+                    <Editor Text="{Binding Descrizione}"
+                            FontSize="25"
+                            AutoSize="TextChanges"
+                            Placeholder="Descrizione"
+                            HeightRequest="70"/>
+
+                    <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Padding="0, 50, 0, 0">
+                        <Label Text="Tipologia: " FontSize="25"/>
+                        <Entry Text="{Binding Tipologia}"
+                               FontSize="25"
+                               WidthRequest="200"
+                               Placeholder="Tipologia"/>
+                    </StackLayout>
+
+                    <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Padding="0, 30, 0, 0">
+                        <Label Text="Tematica: " FontSize="25"/>
+                        <Entry Text="{Binding Tematica}"
+                               FontSize="25"
+                               WidthRequest="200"
+                               Placeholder="Tematica"/>
+                    </StackLayout>
+
+                    <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Padding="0, 30, 0, 0">
+                        <Label Text="Eta minima: " FontSize="25"/>
+                        <Entry Text="{Binding MinimumAge}"
+                               FontSize="25"
+                               WidthRequest="100"
+                               Keyboard="Numeric"
+                               Placeholder="Eta minima"/>
+                    </StackLayout>
+
+                    <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Padding="0, 30, 0, 0">
+                        <Label Text="Stato: " FontSize="25"/>
+                        <Picker Title="Seleziona stato"
+                                FontSize="25"
+                                WidthRequest="200"
+                                SelectedItem="{Binding State}">
+                            <Picker.ItemsSource>
+                                <x:Array Type="{x:Type x:String}">
+                                    <x:String>attiva</x:String>
+                                    <x:String>manutenzione</x:String>
+                                    <x:String>chiusa</x:String>
+                                </x:Array>
+                            </Picker.ItemsSource>
+                        </Picker>
+                    </StackLayout>
+
+                    <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Padding="0, 30, 0, 0">
+                        <Label Text="Capacita oraria: " FontSize="25"/>
+                        <Picker Title="Seleziona capacita"
+                                FontSize="25"
+                                WidthRequest="150"
+                                SelectedItem="{Binding HourCapacity}">
+                            <Picker.ItemsSource>
+                                <x:Array Type="{x:Type x:Int32}">
+                                    <x:Int32>50</x:Int32>
+                                    <x:Int32>100</x:Int32>
+                                    <x:Int32>150</x:Int32>
+                                    <x:Int32>200</x:Int32>
+                                    <x:Int32>250</x:Int32>
+                                    <x:Int32>300</x:Int32>
+                                    <x:Int32>350</x:Int32>
+                                    <x:Int32>400</x:Int32>
+                                    <x:Int32>450</x:Int32>
+                                    <x:Int32>500</x:Int32>
+                                </x:Array>
+                            </Picker.ItemsSource>
+                        </Picker>
+                    </StackLayout>
+
+                </VerticalStackLayout>
+            </Grid>
         </ScrollView>
+
+        <Grid Grid.Row="1">
+            <HorizontalStackLayout x:Name="ViewButtonsLayout" HorizontalOptions="Center" Spacing="20" Padding="20,30">
+                <Button Text="Modifica"
+            BackgroundColor="#FFD700"
+            TextColor="Black"
+            FontSize="20"
+            Clicked="OnModificaAttrazioneClicked" />
+                <Button Text="Elimina"
+            BackgroundColor="#FF4444"
+            TextColor="White"
+            FontSize="20"
+            Clicked="OnEliminaAttrazioneClicked" />
+            </HorizontalStackLayout>
+
+            <HorizontalStackLayout x:Name="EditButtonsLayout" HorizontalOptions="Center" Spacing="20" Padding="20,30" IsVisible="False">
+                <Button Text="Annulla"
+            BackgroundColor="#CCCCCC"
+            TextColor="Black"
+            FontSize="20"
+            Clicked="OnAnnullaModificaClicked" />
+                <Button Text="Conferma"
+            BackgroundColor="#00C853"
+            TextColor="White"
+            FontSize="20"
+            Clicked="OnConfermaModificaClicked" />
+            </HorizontalStackLayout>
+        </Grid>
 
         
         <!-- Grid per i pulsanti di navigazione, ancorata in basso -->
-        <Grid Grid.Row="1" VerticalOptions="End">
+        <Grid Grid.Row="2" VerticalOptions="End">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />

@@ -708,5 +708,101 @@ namespace ParkSystemApp.Services
         }
 
 
+
+        public async Task<String> AggiornaAttrazioneAsync(Attrazione attrazione)
+        {
+            var token = await SecureStorage.GetAsync("AuthToken");
+            if (string.IsNullOrEmpty(token))
+            {
+                return "Errore: Utente non autenticato";
+            }
+
+            _httpClient.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", token);
+
+            var payload = new
+            {   id = attrazione.ID,
+                nome = attrazione.Nome,
+                descrizione = attrazione.Descrizione,
+                tipologia = attrazione.Tipologia,
+                tematica = attrazione.Tematica,
+                minimumAge = attrazione.MinimumAge,
+                state = attrazione.State,
+                hourCapacity = attrazione.HourCapacity
+            };
+
+            var content = new StringContent(
+                JsonSerializer.Serialize(payload),
+                Encoding.UTF8,
+                "application/json"
+            );
+
+            var response = await _httpClient.PutAsync("/attrazioni/modify", content);
+
+            if (response.IsSuccessStatusCode)
+            {
+                return "OK";
+            }
+
+            var error = await response.Content.ReadAsStringAsync();
+            return $"Errore dal server: {error}";
+        }
+
+
+        public async Task<string> EliminaAttrazioneAsync(int idAttrazione)
+        {
+            var token = await SecureStorage.GetAsync("AuthToken");
+            if (string.IsNullOrEmpty(token))
+                return "Errore: Utente non autenticato";
+
+            _httpClient.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", token);
+
+            var payload = new { id = idAttrazione };
+
+            var content = new StringContent(
+                JsonSerializer.Serialize(payload),
+                Encoding.UTF8,
+                "application/json"
+            );
+
+            var response = await _httpClient.PostAsync("attrazioni/delete", content);
+
+            if (response.IsSuccessStatusCode)
+                return "OK";
+
+            var error = await response.Content.ReadAsStringAsync();
+            return $"Errore: {error}";
+        }
+
+
+
+
+        public async Task<String> InserisciAttrazioneAsync(Attrazione attrazione)
+        {
+            var token = await SecureStorage.GetAsync("AuthToken");
+            if (string.IsNullOrEmpty(token))
+                return "Errore: Utente non autenticato";
+
+            _httpClient.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", token);
+
+
+            var content = new StringContent(
+                JsonSerializer.Serialize(attrazione),
+                Encoding.UTF8,
+                "application/json"
+            );
+
+            // Effettua una richiesta POST per inserire l'attrazione
+            var response = await _httpClient.PostAsync("attrazioni/insert", content);
+
+            if (response.IsSuccessStatusCode)
+                return "OK";  // Operazione riuscita
+
+            var error = await response.Content.ReadAsStringAsync();
+            return $"Errore: {error}";  // Restituisce il messaggio di errore dalla risposta
+        }
+
     }
 }
