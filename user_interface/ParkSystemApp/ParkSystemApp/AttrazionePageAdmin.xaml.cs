@@ -37,7 +37,7 @@ public partial class AttrazionePageAdmin : ContentPage, IQueryAttributable
     private async void OnProfileClicked(object sender, EventArgs e)
     {
         // Naviga alla pagina di registrazione
-        await Shell.Current.GoToAsync(nameof(Profilo), false);
+        await Shell.Current.GoToAsync("//ProfiloAdmin", false);
     }
 
 
