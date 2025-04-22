@@ -55,7 +55,7 @@ public partial class AttrazionePage : ContentPage, IQueryAttributable
             var result = await _apiService.BookAttractionAsync(attr.ID);
             // Gestisci il risultato come necessario
             // Ad esempio, mostrare un messaggio di conferma o di errore
-            await DisplayAlert("Prenotazione", result, "OK");
+            await DisplayAlert("", " Prenotazione Effetuata!", "OK");
         }
         else
         {

@@ -31,6 +31,9 @@ func SetupRoutes(db *sql.DB, jwtSecret string) *mux.Router {
 
 	// Endpoint pubblici (non protetti) per ottenere informazioni sulle attrazioni
 	r.HandleFunc("/attrazioni", handlers.GetAttrazioniHandler(db)).Methods("GET")
+	r.HandleFunc("/stats/global", handlers.GetGlobalStatsHandler).Methods("GET")
+	r.HandleFunc("/stats/daily", handlers.GetDailyStatsByAttrazioneID).Methods("GET")
+
 	r.Handle("/attrazioni/insert", middleware.JWTMiddleware(handlers.InsertAttrazioneHandler(db))).Methods("POST")
 	r.Handle("/attrazioni/modify", middleware.JWTMiddleware(handlers.UpdateAttrazioneHandler(db))).Methods("PUT")
 	r.Handle("/attrazioni/delete", middleware.JWTMiddleware(handlers.DeleteAttrazioneHandler(db))).Methods("POST")

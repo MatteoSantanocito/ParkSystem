@@ -25,6 +25,8 @@ services:
         condition: service_healthy
     ports:
       - "8080:8080"
+    volumes:
+      - ./data:/data
     environment:
       DATABASE_HOST: db
       DATABASE_PORT: 5432
@@ -33,3 +35,21 @@ services:
       DATABASE_NAME: parksystem_db
       JWT_SECRET: mysecretkey
     restart: always
+
+
+  analytics:
+      build: ./recommendation_python  # <-- directory dove hai Dockerfile + app.py
+      container_name: parksystem_analytics
+      depends_on:
+        db:
+          condition: service_healthy
+      volumes:
+      - ./data:/data
+      
+      environment:
+        DB_HOST: db
+        DB_PORT: 5432
+        DB_USER: parksys
+        DB_PASSWORD: system
+        DB_NAME: parksystem_db
+      restart: always
