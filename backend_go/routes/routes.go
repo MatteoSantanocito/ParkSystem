@@ -51,7 +51,7 @@ func SetupRoutes(db *sql.DB, jwtSecret string) *mux.Router {
 	r.Handle("/friendship/reject", middleware.JWTMiddleware(http.HandlerFunc(handlers.RejectFriendRequest(db)))).Methods("PUT")
 	r.Handle("/friendship/list", middleware.JWTMiddleware(http.HandlerFunc(handlers.ListFriendships(db)))).Methods("GET")
 	r.Handle("/friendship/search", middleware.JWTMiddleware(http.HandlerFunc(handlers.SearchUserHandler(db)))).Methods("GET")
-
+	r.Handle("/friendship/bookings", middleware.JWTMiddleware(http.HandlerFunc(handlers.GetFriendsBookings(db)))).Methods("GET")
 	///gli endpoint per registrazione e login sono pubblici: non richiedono che
 	///l'utente sia già autenticato, perché sono il punto di ingresso per ottenere
 	///il token. Invece, le operazioni che modificano dati sensibili (cambio email,

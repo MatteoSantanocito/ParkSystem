@@ -8,6 +8,7 @@ public partial class AttrazionePage : ContentPage, IQueryAttributable
 {
     private readonly ApiService _apiService;
     private bool isBooked = false;
+    private int currentRating = 0;
 
 
     public AttrazionePage()
@@ -19,9 +20,20 @@ public partial class AttrazionePage : ContentPage, IQueryAttributable
 
     private void UpdateUI()
     {
-        BookingLabel.IsVisible = !isBooked;
-        BookButton.IsVisible = !isBooked;
-        CancelButton.IsVisible = isBooked;
+        if (isBooked)
+        {
+            BookingLabel.Text = "Hai prenotato. Vuoi annullare?";
+            BookingLabel.IsVisible = true;
+            BookButton.IsVisible = false;
+            CancelButton.IsVisible = true;
+        }
+        else
+        {
+            BookingLabel.Text = "Vuoi prenotare un posto?";
+            BookingLabel.IsVisible = true;
+            BookButton.IsVisible = true;
+            CancelButton.IsVisible = false;
+        }
     }
 
     public void ApplyQueryAttributes(IDictionary<string, object> query)
@@ -29,6 +41,33 @@ public partial class AttrazionePage : ContentPage, IQueryAttributable
         if (query.TryGetValue("attrazione", out var obj) && obj is Attrazione attr)
         {
             BindingContext = attr;
+        }
+    }
+
+    protected override async void OnAppearing()
+    {
+        base.OnAppearing();
+        await LoadFriendsBookings();
+    }
+
+    private async Task LoadFriendsBookings()
+    {
+        try
+        {
+            FriendsBookingsFrame.IsVisible = true;
+            
+            if (BindingContext is Attrazione attr)
+            {
+                var friends = await _apiService.GetFriendsBookingsAsync(attr.ID);
+                
+                // Modifica questa linea:
+                FriendsBookingsCollection.ItemsSource = friends ?? new List<ApiService.FriendBookingInfo>();
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Errore nel caricamento amici: {ex}");
+            FriendsBookingsCollection.ItemsSource = new List<ApiService.FriendBookingInfo>();
         }
     }
 
@@ -51,11 +90,12 @@ public partial class AttrazionePage : ContentPage, IQueryAttributable
         {
             isBooked = true;
             UpdateUI();
-            // Avvia il timer qui
+            
             var result = await _apiService.BookAttractionAsync(attr.ID);
-            // Gestisci il risultato come necessario
-            // Ad esempio, mostrare un messaggio di conferma o di errore
-            await DisplayAlert("", " Prenotazione Effetuata!", "OK");
+            await DisplayAlert("", " Prenotazione Effettuata!", "OK");
+            
+            // Ricarica la lista degli amici prenotati
+            LoadFriendsBookings();
         }
         else
         {
@@ -64,15 +104,22 @@ public partial class AttrazionePage : ContentPage, IQueryAttributable
     }
 
 
-    private void OnCancelClicked(object sender, EventArgs e)
-    {
-        isBooked = false;
-        UpdateUI();
-        // Ferma il timer qui
+    private async void OnCancelClicked(object sender, EventArgs e)
+        {
+            isBooked = false;
+            UpdateUI();
+            
+            await _apiService.DeleteBookingAsync();
+            
+            // Ricarica la lista degli amici prenotati
+            LoadFriendsBookings();
+        }
 
-        _apiService.DeleteBookingAsync();
-        
+    private async void OnFriendshipClicked(object sender, EventArgs e)
+    {
+        await Shell.Current.GoToAsync("///FriendshipPage");
     }
+
 
     private async void OnStarClicked(object sender, EventArgs e)
     {
@@ -82,11 +129,43 @@ public partial class AttrazionePage : ContentPage, IQueryAttributable
             if (button != null)
             {
                 int rating = Convert.ToInt32(button.CommandParameter);
+                currentRating = rating;
+                UpdateStars(rating);
 
-                ApiService apiService = new ApiService();
-                await apiService.SendRating(attr.ID, rating);
-
+                try
+                {
+                    // Invia la valutazione
+                    ApiService apiService = new ApiService();
+                    await apiService.SendRating(attr.ID, rating);
+                    
+                    // Nascondi le stelle e mostra il messaggio
+                    StarsContainer.IsVisible = false;
+                    RatingTitle.IsVisible = false;
+                    ThankYouLabel.IsVisible = true;
+                    
+                }
+                catch (Exception ex)
+                {
+                    await DisplayAlert("Errore", $"Recensione non inviata: {ex.Message}", "OK");
+                }
             }
         }
+    }
+
+    private void UpdateStars(int rating)
+    {
+        // Resetta tutte le stelle a grigio
+        Star1.TextColor = Colors.LightGray;
+        Star2.TextColor = Colors.LightGray;
+        Star3.TextColor = Colors.LightGray;
+        Star4.TextColor = Colors.LightGray;
+        Star5.TextColor = Colors.LightGray;
+
+        // Colora le stelle fino al rating selezionato
+        if (rating >= 1) Star1.TextColor = Colors.Gold;
+        if (rating >= 2) Star2.TextColor = Colors.Gold;
+        if (rating >= 3) Star3.TextColor = Colors.Gold;
+        if (rating >= 4) Star4.TextColor = Colors.Gold;
+        if (rating >= 5) Star5.TextColor = Colors.Gold;
     }
 }

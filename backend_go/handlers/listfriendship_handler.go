@@ -260,3 +260,60 @@ func ListFriendships(db *sql.DB) http.HandlerFunc {
 		json.NewEncoder(w).Encode(response)
 	}
 }
+
+// FriendBooking rappresenta un amico che ha prenotato l'attrazione
+type FriendBooking struct {
+	IDUtente    int    `json:"id_utente"`
+	Nome        string `json:"nome"`
+	Cognome     string `json:"cognome"`
+	PrenotatoIl string `json:"prenotato_il"`
+}
+
+func GetFriendsBookings(db *sql.DB) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		// Recupera l'ID utente e l'ID attrazione
+		log.Println("Richiesta amici prenotati ricevuta")
+		attractionID := r.URL.Query().Get("attraction_id")
+		userID := r.Context().Value("userID").(int)
+		if attractionID == "" {
+			http.Error(w, "ID attrazione mancante", http.StatusBadRequest)
+			return
+		}
+		log.Printf("Parametri: userID=%d, attractionID=%s\n", userID, attractionID)
+
+		query := `
+            SELECT u.id_utente, u.nome, u.cognome, 
+                   TO_CHAR(p.data_prenotazione, 'DD/MM/YYYY HH24:MI') as prenotato_il
+            FROM prenotazioni p
+            JOIN utenti u ON p.id_utente = u.id_utente
+            JOIN amicizie a ON (
+                (a.id_utente_mittente = $1 AND a.id_utente_destinatario = p.id_utente) OR
+                (a.id_utente_destinatario = $1 AND a.id_utente_mittente = p.id_utente)
+            )
+            WHERE p.id_attrazione = $2 
+            AND p.stato_prenotazione = 'attiva'
+            AND a.stato_richiesta = 'accettata'
+            ORDER BY p.data_prenotazione DESC
+        `
+
+		rows, err := db.Query(query, userID, attractionID)
+		if err != nil {
+			http.Error(w, "Errore nel database", http.StatusInternalServerError)
+			return
+		}
+		defer rows.Close()
+
+		var friends []FriendBooking
+		for rows.Next() {
+			var fb FriendBooking
+			if err := rows.Scan(&fb.IDUtente, &fb.Nome, &fb.Cognome, &fb.PrenotatoIl); err != nil {
+				http.Error(w, "Errore nella lettura dei dati", http.StatusInternalServerError)
+				return
+			}
+			friends = append(friends, fb)
+		}
+
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(friends)
+	}
+}

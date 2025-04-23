@@ -804,5 +804,64 @@ namespace ParkSystemApp.Services
             return $"Errore: {error}";  // Restituisce il messaggio di errore dalla risposta
         }
 
+        public async Task<List<FriendBookingInfo>> GetFriendsBookingsAsync(int attractionId)
+        {
+            try
+            {
+                // VERIFICA 1: Token esiste?
+                var token = await SecureStorage.GetAsync("AuthToken");
+                if (string.IsNullOrEmpty(token))
+                {
+                    throw new Exception("Token JWT mancante");
+                }
+
+                // VERIFICA 2: URL corretto?
+                var url = $"/friendship/bookings?attraction_id={attractionId}";
+                Debug.WriteLine($"[API] Chiamando: {url}");
+
+                // VERIFICA 3: Headers corretti?
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                
+                // VERIFICA 4: Timeout sufficiente?
+                _httpClient.Timeout = TimeSpan.FromSeconds(15);
+
+                var response = await _httpClient.GetAsync(url);
+                var content = await response.Content.ReadAsStringAsync();
+
+                Debug.WriteLine($"[API] Risposta: {response.StatusCode}\n{content}");
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new Exception($"API error: {response.StatusCode}");
+                }
+
+                // VERIFICA 5: Deserializzazione corretta?
+                var options = new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true,
+                    Converters = { new JsonDateTimeConverter() }
+                };
+                
+                return JsonSerializer.Deserialize<List<FriendBookingInfo>>(content, options);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[API CRITICAL] {ex}");
+                throw;
+            }
+        }
+
+        public class FriendBookingInfo
+        {
+            public int IdUtente { get; set; }
+            public string Nome { get; set; }
+            public string Cognome { get; set; }
+            public string PrenotatoIl { get; set; }
+            
+            public string FullName => $"{Nome} {Cognome}";
+        }
+
     }
+
+    
 }

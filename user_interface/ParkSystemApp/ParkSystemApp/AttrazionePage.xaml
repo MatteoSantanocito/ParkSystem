@@ -4,109 +4,241 @@
              Title="AttrazionePage"
              BackgroundColor="#D99B9B">
 
-    <Grid RowDefinitions="3*, Auto, Auto, 1*">
-        <!-- Grid per le informazioni della giostra -->
-        <ScrollView Grid.Row="0">
-            <VerticalStackLayout Padding="20">
-                <Label Text="{Binding Nome}"
-                       FontSize="45"
-                       HorizontalOptions="Center"
-                       Padding="10"/>
+    <Grid RowDefinitions="150, Auto, 120, Auto, *, 60">
+        <!-- Immagine e informazioni attrazione -->
+        <Frame Grid.Row="0" 
+               Margin="20,20,20,0" 
+               Padding="0"
+               CornerRadius="15"
+               HasShadow="True"
+               BackgroundColor="#F0F0F0">
+            <Grid>
                 <Image Source="{Binding ImagePath}"
-                       HorizontalOptions="Center"
-                       HeightRequest="200"
-                       WidthRequest="200"/>
-                <Label Text="{Binding Descrizione}"
-                       FontSize="25"
-                       HorizontalOptions="Center"
-                       Padding="0,10,0,10"/>
-                <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Padding="10">
-                    <Label Text="Età minima: "
-                           FontSize="25"/>
-                    <Label Text="{Binding MinimumAge}"
-                           FontSize="25"/>
-                </StackLayout>
+                       Aspect="AspectFill"
+                       HeightRequest="150"/>
+                <BoxView Color="#80000000" 
+                         VerticalOptions="End"
+                         HeightRequest="60"/>
+                <Label Text="{Binding Nome}"
+                       FontSize="28"
+                       FontAttributes="Bold"
+                       TextColor="White"
+                       VerticalOptions="End"
+                       Margin="15,0,15,10"/>
+            </Grid>
+        </Frame>
+
+        <!-- Descrizione e dettagli -->
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Padding="20,10,20,20" Spacing="10">
+                <Label Text="Descrizione"
+                       FontSize="20"
+                       FontAttributes="Bold"
+                       TextColor="#333333"/>
+                
+                <Frame CornerRadius="10"
+                       BackgroundColor="#FFFFFF"
+                       Padding="15"
+                       HasShadow="False">
+                    <Label Text="{Binding Descrizione}"
+                           FontSize="16"
+                           TextColor="#555555"/>
+                </Frame>
+                
+                <Grid ColumnDefinitions="*,*" RowDefinitions="Auto">
+                    <Frame Grid.Column="0"
+                           CornerRadius="10"
+                           BackgroundColor="#FFFFFF"
+                           Padding="15"
+                           HasShadow="False">
+                        <HorizontalStackLayout Spacing="5">
+                            <Label Text="🚀"
+                                   FontSize="16"/>
+                            <Label Text="Età minima: "
+                                   FontSize="16"/>
+                            <Label Text="{Binding MinimumAge}"
+                                   FontSize="16"
+                                   FontAttributes="Bold"/>
+                        </HorizontalStackLayout>
+                    </Frame>
+                    
+                    <Frame Grid.Column="1"
+                           Margin="10,0,0,0"
+                           CornerRadius="10"
+                           BackgroundColor="#FFFFFF"
+                           Padding="15"
+                           HasShadow="False">
+                        <HorizontalStackLayout Spacing="5">
+                            <Label Text="⏱️"
+                                   FontSize="16"/>
+                            <Label Text="Durata: "
+                                   FontSize="16"/>
+                            <Label Text="5 min"
+                                   FontSize="16"
+                                   FontAttributes="Bold"/>
+                        </HorizontalStackLayout>
+                    </Frame>
+                </Grid>
             </VerticalStackLayout>
         </ScrollView>
 
-        <Grid Grid.Row="1" x:Name="RatingGrid">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <Button Grid.Column="0" Text="&#xe838;" FontFamily="MaterialIcons" FontSize="30"
-           Clicked="OnStarClicked" CommandParameter="1" BackgroundColor="Red" TextColor="White"/>
-            <Button Grid.Column="1" Text="&#xe838;" FontFamily="MaterialIcons" FontSize="30"
-           Clicked="OnStarClicked" CommandParameter="2" BackgroundColor="Orange" TextColor="White"/>
-            <Button Grid.Column="2" Text="&#xe838;" FontFamily="MaterialIcons" FontSize="30"
-           Clicked="OnStarClicked" CommandParameter="3" BackgroundColor="Yellow" TextColor="White"/>
-            <Button Grid.Column="3" Text="&#xe838;" FontFamily="MaterialIcons" FontSize="30"
-           Clicked="OnStarClicked" CommandParameter="4" BackgroundColor="LightGreen" TextColor="White"/>
-            <Button Grid.Column="4" Text="&#xe838;" FontFamily="MaterialIcons" FontSize="30"
-           Clicked="OnStarClicked" CommandParameter="5" BackgroundColor="Green" TextColor="White"/>
-        </Grid>
-
-
-
-
-
-        <Grid Grid.Row="2" Padding="10">
-            <VerticalStackLayout HorizontalOptions="Center" Spacing="10">
-                <Label x:Name="BookingLabel"
-                       Text="Vuoi prenotare un posto?"
-                       FontSize="20"
-                       HorizontalOptions="Center"
-                       IsVisible="True"/>
-                <Button x:Name="BookButton"
-                        Text="Prenota ora"
-                        FontSize="20"
-                        BackgroundColor="Blue"
-                        TextColor="White"
-                        HorizontalOptions="Center"
-                        Clicked="OnBookClicked"
-                        IsVisible="True"/>
-                <Button x:Name="CancelButton"
-                        Text="Annulla prenotazione"
-                        FontSize="20"
-                        BackgroundColor="Red"
-                        TextColor="White"
-                        HorizontalOptions="Center"
-                        Clicked="OnCancelClicked"
-                        IsVisible="False"/>
+        <Frame Grid.Row="2"
+            Margin="20,10,20,0"
+            CornerRadius="15"
+            BackgroundColor="#F0F0F0"
+            Padding="10"
+            HasShadow="True"
+            x:Name="FriendsBookingsFrame"
+            HeightRequest="130"
+            IsVisible="true">
+            <VerticalStackLayout Spacing="10">
+                <Label Text="Amici su questa attrazione:" 
+                    FontSize="16"
+                    FontAttributes="Bold"
+                    HorizontalOptions="Center"/>
+                
+                <CollectionView x:Name="FriendsBookingsCollection" 
+                            HeightRequest="80"
+                            ItemsLayout="HorizontalList"
+                            HorizontalOptions="FillAndExpand" 
+                            >
+                    <CollectionView.EmptyView>
+                        <Label Text="Nessun amico ha prenotato"
+                               FontSize="14"
+                               TextColor="#666666"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center"/>
+                    </CollectionView.EmptyView>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Frame CornerRadius="10"
+                                Padding="10"
+                                BackgroundColor="White"
+                                Margin="0,0,10,0">
+                                <Label Text="{Binding FullName}" 
+                                        FontSize="14"
+                                        FontAttributes="Bold"/>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
             </VerticalStackLayout>
+        </Frame>
+
+        <!-- Rating stars -  -->
+        <Frame Grid.Row="3"
+           Margin="20,20,20,10"
+           CornerRadius="15"
+           BackgroundColor="#F0F0F0"
+           Padding="10"
+           HasShadow="True"
+           x:Name="RatingFrame">
+            <VerticalStackLayout Spacing="10">
+                <Label Text="Valuta questa attrazione:" 
+                   FontSize="16"
+                   HorizontalOptions="Center"
+                   x:Name="RatingTitle"/>
+
+                <Grid ColumnDefinitions="*,*,*,*,*" HorizontalOptions="Center" x:Name="StarsContainer">
+                    <Button Grid.Column="0" Text="★" FontSize="30"
+                        Clicked="OnStarClicked" CommandParameter="1" 
+                        BackgroundColor="Transparent" TextColor="LightGray" x:Name="Star1"/>
+                    <Button Grid.Column="1" Text="★" FontSize="30"
+                        Clicked="OnStarClicked" CommandParameter="2" 
+                        BackgroundColor="Transparent" TextColor="LightGray" x:Name="Star2"/>
+                    <Button Grid.Column="2" Text="★" FontSize="30"
+                        Clicked="OnStarClicked" CommandParameter="3" 
+                        BackgroundColor="Transparent" TextColor="LightGray" x:Name="Star3"/>
+                    <Button Grid.Column="3" Text="★" FontSize="30"
+                        Clicked="OnStarClicked" CommandParameter="4" 
+                        BackgroundColor="Transparent" TextColor="LightGray" x:Name="Star4"/>
+                    <Button Grid.Column="4" Text="★" FontSize="30"
+                        Clicked="OnStarClicked" CommandParameter="5" 
+                        BackgroundColor="Transparent" TextColor="LightGray" x:Name="Star5"/>
+                </Grid>
+                <Label Text="Grazie per la tua recensione!"
+                        FontSize="16"
+                        HorizontalOptions="Center"
+                        TextColor="Green"
+                        IsVisible="False"
+                        x:Name="ThankYouLabel"/>
+            </VerticalStackLayout>
+        </Frame>
+
+        <!-- Prenotazione -->
+        <Grid Grid.Row="4" Padding="20,0,20,60" Margin="0,0,0,0">
+            <Frame CornerRadius="15"
+                   BackgroundColor="#F0F0F0"
+                   Padding="15"
+                   HasShadow="True">
+                <VerticalStackLayout Spacing="10">
+                    <Label x:Name="BookingLabel"
+                           Text="Vuoi prenotare un posto?"
+                           FontSize="15"
+                           HorizontalOptions="Center"/>
+                    
+                    <Button x:Name="BookButton"
+                            Text="PRENOTA ORA"
+                            FontSize="15"
+                            FontAttributes="Bold"
+                            BackgroundColor="#4CAF50"
+                            TextColor="White"
+                            CornerRadius="10"
+                            HeightRequest="50"
+                            HorizontalOptions="Fill"
+                            Clicked="OnBookClicked"
+                            IsVisible="True"/>
+                    
+                    <Button x:Name="CancelButton"
+                            Text="ANNULLA PRENOTAZIONE"
+                            FontSize="15"
+                            FontAttributes="Bold"
+                            BackgroundColor="#F44336"
+                            TextColor="White"
+                            CornerRadius="10"
+                            HeightRequest="50"
+                            HorizontalOptions="Fill"
+                            Clicked="OnCancelClicked"
+                            IsVisible="False"/>
+                </VerticalStackLayout>
+            </Frame>
         </Grid>
 
-        <!-- Grid per i pulsanti di navigazione, ancorata in basso -->
-        <Grid Grid.Row="3" VerticalOptions="End">
+         <!-- Grid per i pulsanti di navigazione, ancorata in basso -->
+        <Grid Grid.Row="5" BackgroundColor="White" VerticalOptions="End" HeightRequest="60">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <Button Grid.Column="0"
-                    Text="&#xe88a;"
-                    FontFamily="MaterialIcons"
-                    FontSize="20"
-                    TextColor="Black"
-                    BackgroundColor="Transparent"
-                    Clicked="OnBackToMainPageClicked" />
-            <Button Grid.Column="1"
-                    Text="&#xe838;"
-                    FontFamily="MaterialIcons"
-                    FontSize="20"
-                    TextColor="Black"
-                    BackgroundColor="Transparent"/>
-            <Button Grid.Column="2"
-                    Text="&#xe7fd;"
-                    FontFamily="MaterialIcons"
-                    FontSize="20"
-                    TextColor="Black"
-                    BackgroundColor="Transparent"
-                    Clicked="OnProfileClicked"/>
+            <Button Grid.Column="0" 
+                Text="&#xe88a;" 
+                FontFamily="MaterialIcons"
+                FontSize="20"
+                TextColor="Black"
+                BackgroundColor="Transparent"
+                Clicked="OnBackToMainPageClicked" />
+            <Button Grid.Column="1" 
+                Text="&#xe838;" 
+                FontFamily="MaterialIcons"
+                FontSize="20"
+                TextColor="Black"
+                BackgroundColor="Transparent" />
+            <Button Grid.Column="2" 
+                Text="&#xe7fe;" 
+                FontFamily="MaterialIcons"
+                FontSize="20"
+                TextColor="Black"
+                BackgroundColor="Transparent" 
+                Clicked="OnFriendshipClicked" />
+            <Button Grid.Column="3" 
+                Text="&#xe8b8;" 
+                FontFamily="MaterialIcons"
+                FontSize="20"
+                TextColor="Black"
+                BackgroundColor="Transparent"
+                Clicked="OnProfileClicked"/>
         </Grid>
     </Grid>
-
 </ContentPage>
