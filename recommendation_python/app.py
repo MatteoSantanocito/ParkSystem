@@ -15,7 +15,7 @@ def connect_db():
 
 # Ottiene dati sulle attrazioni
 def fetch_attractions(conn):
-    query = "SELECT id_attrazione, nome, capacita_oraria FROM attrazioni WHERE stato='attiva'"
+    query = "SELECT id_attrazione, nome, capacita_oraria, tipologia FROM attrazioni WHERE stato='attiva'"
     return pd.read_sql(query, conn)
 
 # Ottiene prenotazioni del mese corrente

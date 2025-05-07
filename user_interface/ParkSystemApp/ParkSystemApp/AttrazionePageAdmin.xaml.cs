@@ -3,20 +3,56 @@ namespace ParkSystemApp;
 using ParkSystemApp.Services;
 using ParkSystemApp.Models;
 using System.Diagnostics;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
-public partial class AttrazionePageAdmin : ContentPage, IQueryAttributable
+public partial class AttrazionePageAdmin : ContentPage, IQueryAttributable, INotifyPropertyChanged
 {
     private readonly ApiService _apiService;
     private bool isEditing = false;
     private readonly Action<int> _onEliminaCallback;
+    private Attrazione _attrazione;
+    public Attrazione Attrazione
+    {
+        get => _attrazione;
+        set
+        {
+            _attrazione = value;
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(Attrazione.ImagePath)); // <-- forza aggiornamento
+        }
+    }
+
 
     public AttrazionePageAdmin(Attrazione attrazione, Action<int> onEliminaCallback)
 	{
         InitializeComponent();
         _apiService = new ApiService();
-        BindingContext = attrazione;
+        BindingContext = this; // <--- PER BINDING A PROPRIETÀ PUBBLICHE
+        Attrazione = attrazione;
         _onEliminaCallback = onEliminaCallback;
+
+        _ = CaricaStatisticheGiornaliere(attrazione.ID);
     }
+
+
+    public event PropertyChangedEventHandler PropertyChanged;
+
+    private DailyStat _dailyStat;
+    public DailyStat DailyStat
+    {
+        get => _dailyStat;
+        set
+        {
+            _dailyStat = value;
+            OnPropertyChanged();
+        }
+    }
+
+    protected void OnPropertyChanged([CallerMemberName] string propertyName = "")
+        => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+
+
 
 
     public void ApplyQueryAttributes(IDictionary<string, object> query)
@@ -24,6 +60,19 @@ public partial class AttrazionePageAdmin : ContentPage, IQueryAttributable
         if (query.TryGetValue("attrazione", out var obj) && obj is Attrazione attr)
         {
             BindingContext = attr;
+        }
+    }
+
+
+    private async Task CaricaStatisticheGiornaliere(int idAttrazione)
+    {
+        try
+        {
+            DailyStat = await _apiService.GetDailyStatsByAttrazioneIdAsync(idAttrazione);
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlert("Errore", ex.Message, "OK");
         }
     }
 

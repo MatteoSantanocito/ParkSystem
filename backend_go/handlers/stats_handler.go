@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 	"os"
 	"strconv"
@@ -63,5 +64,17 @@ func GetDailyStatsByAttrazioneID(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	http.Error(w, "Attrazione non trovata", http.StatusNotFound)
+	log.Println("⚠️ Nessuna statistica trovata, restituisco stat vuota")
+
+	// Se non trovata, restituisci uno stat "vuoto"
+	emptyStat := DailyStat{
+		IDAttrazione:                           id,
+		Nome:                                   "N/A",
+		PercentualeRiempimentoOraria:           0.0,
+		PercentualeMediaRiempimentoGiornaliera: 0.0,
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(emptyStat)
+
 }

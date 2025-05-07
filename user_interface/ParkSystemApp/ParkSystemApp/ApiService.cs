@@ -1,4 +1,5 @@
 using System;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -861,7 +862,79 @@ namespace ParkSystemApp.Services
             public string FullName => $"{Nome} {Cognome}";
         }
 
+
+
+        public async Task<List<GlobalStats>> GetGlobalStatsAsync()
+        {
+            try
+            {
+                HttpResponseMessage response = await _httpClient.GetAsync("/stats/global");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string jsonResponse = await response.Content.ReadAsStringAsync();
+                    var options = new JsonSerializerOptions
+                    {
+                        PropertyNameCaseInsensitive = true
+                    };
+
+                    List<GlobalStats> statsList = JsonSerializer.Deserialize<List<GlobalStats>>(jsonResponse, options);
+
+                    if (statsList != null)
+                        return statsList;
+                    else
+                        throw new Exception("Il JSON ricevuto è nullo");
+                }
+                else
+                {
+                    throw new Exception("Non è stato possibile recuperare le statistiche globali");
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Errore durante il recupero delle statistiche globali: {ex.Message}");
+            }
+        }
+
+
+        public async Task<DailyStat> GetDailyStatsByAttrazioneIdAsync(int idAttrazione)
+        {
+            try
+            {
+                string url = $"/stats/daily?id={idAttrazione}";
+                HttpResponseMessage response = await _httpClient.GetAsync(url);
+                if (response.IsSuccessStatusCode)
+                {
+                    string jsonResponse = await response.Content.ReadAsStringAsync();
+                    var options = new JsonSerializerOptions
+                    {
+                        PropertyNameCaseInsensitive = true
+                    };
+
+                    DailyStat stat = JsonSerializer.Deserialize<DailyStat>(jsonResponse, options);
+                    return stat;
+                }
+                else if (response.StatusCode == HttpStatusCode.NotFound)
+                {
+                    return null; // Nessuna statistica trovata
+                }
+                else
+                {
+                    throw new Exception("Errore nel recupero delle statistiche giornaliere.");
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Errore durante la richiesta delle statistiche giornaliere: {ex.Message}");
+            }
+        }
+
+
+
+
+
+
     }
 
-    
+
 }

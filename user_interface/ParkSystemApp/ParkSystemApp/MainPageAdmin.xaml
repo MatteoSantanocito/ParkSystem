@@ -123,6 +123,7 @@
                     FontSize="20"
                     TextColor="Black"
                     BackgroundColor="Transparent"
+                    Clicked="OnStatsClicked"
                      />
             <Button Grid.Column="2" 
                     Text="&#xe8b8;" 

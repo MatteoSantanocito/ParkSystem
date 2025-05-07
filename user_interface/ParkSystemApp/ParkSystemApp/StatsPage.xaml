@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ParkSystemApp.StatsPage"
+             Title="StatsPage">
+
+
+    <Grid RowDefinitions="Auto,*,Auto">
+        <!-- Barra superiore -->
+        <Grid Grid.Row="0" BackgroundColor="#F4A7A3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <Label WidthRequest="50"
+               HeightRequest="50"
+               VerticalOptions="Center"
+               HorizontalOptions="Start" />
+
+            <Label Text="Park System"
+               Grid.Column="1"
+               HorizontalOptions="Center"
+               VerticalOptions="Center"
+               FontSize="24"
+               FontAttributes="Bold"
+               TextColor="Black"
+               FontFamily="SawarabiGothic"/>
+
+            <Label WidthRequest="50"
+               HeightRequest="50"
+               Grid.Column="2"
+               VerticalOptions="Center"
+               HorizontalOptions="End" />
+
+        </Grid>
+
+        <!-- Parte centrale: Statistiche -->
+        <ScrollView Grid.Row="1">
+            <CollectionView ItemsSource="{Binding}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame Margin="10" Padding="15" BorderColor="Gray" CornerRadius="10">
+                            <StackLayout Spacing="8">
+                                <Label Text="📊 Media giornaliera:" FontAttributes="Bold" />
+                                <Label Text="{Binding MediaPrenotazioniGiornaliereMensile}" />
+
+                                <Label Text="📅 Giorni aperti:" FontAttributes="Bold" />
+                                <Label Text="{Binding GiorniApertiMeseCorrente}" />
+
+                                <Label Text="👥 Media prenotazioni per utente:" FontAttributes="Bold" />
+                                <Label Text="{Binding MediaPrenotazioniPerUtente}" />
+
+                                <Label Text="🔥 Tipologia più prenotata:" FontAttributes="Bold" />
+                                <Label Text="{Binding TipologiaPiuPrenotata}" />
+
+                                <Label Text="❄️ Tipologia meno prenotata:" FontAttributes="Bold" />
+                                <Label Text="{Binding TipologiaMenoPrenotata}" />
+
+                                <Label Text="📈 Giorno con più prenotazioni:" FontAttributes="Bold" />
+                                <Label Text="{Binding GiornoConPiuPrenotazioni.Data}" />
+                                <Label Text="{Binding GiornoConPiuPrenotazioni.NumeroPrenotazioni}" />
+
+                                <Label Text="📉 Giorno con meno prenotazioni:" FontAttributes="Bold" />
+                                <Label Text="{Binding GiornoConMenoPrenotazioni.Data}" />
+                                <Label Text="{Binding GiornoConMenoPrenotazioni.NumeroPrenotazioni}" />
+
+                                <Label Text="🏆 Top 3 attrazioni (%):" FontAttributes="Bold" />
+                                <CollectionView ItemsSource="{Binding Top3Attrazioni}">
+                                    <CollectionView.ItemTemplate>
+                                        <DataTemplate>
+                                            <StackLayout Orientation="Horizontal" Spacing="10">
+                                                <Label Text="{Binding Key}" />
+                                                <Label Text="{Binding Value}" />
+                                            </StackLayout>
+                                        </DataTemplate>
+                                    </CollectionView.ItemTemplate>
+                                </CollectionView>
+
+                                <Label Text="🕒 Distribuzione oraria (%):" FontAttributes="Bold" />
+                                <CollectionView ItemsSource="{Binding DistribuzioneOrariaPercentuale}">
+                                    <CollectionView.ItemTemplate>
+                                        <DataTemplate>
+                                            <StackLayout Orientation="Horizontal" Spacing="10">
+                                                <Label Text="Ora: " />
+                                                <Label Text="{Binding Key}" />
+                                                <Label Text="%" />
+                                                <Label Text="{Binding Value}" />
+                                            </StackLayout>
+                                        </DataTemplate>
+                                    </CollectionView.ItemTemplate>
+                                </CollectionView>
+                            </StackLayout>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </ScrollView>
+
+
+
+        <!-- Nav Bar inferiore -->
+        <Grid Grid.Row="2" BackgroundColor="#F4A7A3" Padding="10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="0" 
+                Text="&#xe88a;" 
+                FontFamily="MaterialIcons"
+                FontSize="20"
+                TextColor="Black"
+                BackgroundColor="Transparent"
+                Clicked="OnHomePageClicked"
+                 />
+            <Button Grid.Column="1" 
+                Text="&#xe838;" 
+                FontFamily="MaterialIcons"
+                FontSize="20"
+                TextColor="Black"
+                BackgroundColor="Transparent"
+                 />
+            <Button Grid.Column="2" 
+                Text="&#xe8b8;" 
+                FontFamily="MaterialIcons"
+                FontSize="20"
+                TextColor="Black"
+                BackgroundColor="Transparent"
+                Clicked="OnProfileClicked" />
+        </Grid>
+    </Grid>
+</ContentPage>

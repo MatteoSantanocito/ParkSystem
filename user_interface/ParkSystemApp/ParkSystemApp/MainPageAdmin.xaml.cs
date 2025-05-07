@@ -80,9 +80,11 @@ namespace ParkSystemApp
             await Navigation.PushAsync(new CreaAttrazionePage());
         }
 
+        private async void OnStatsClicked(object sender, EventArgs e)
+        {
+            await Shell.Current.GoToAsync(nameof(StatsPage));
 
-
-
+        }
     }
 
 

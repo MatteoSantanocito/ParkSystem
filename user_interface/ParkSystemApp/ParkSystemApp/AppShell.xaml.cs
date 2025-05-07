@@ -13,12 +13,14 @@ namespace ParkSystemApp
             Routing.RegisterRoute(nameof(Login), typeof(Login));
             Routing.RegisterRoute(nameof(MainPage), typeof(MainPage));
             Routing.RegisterRoute(nameof(AttrazionePage), typeof(AttrazionePage));
+            Routing.RegisterRoute(nameof(StatsPage), typeof(StatsPage));
+
 
             Routing.RegisterRoute("Profilo", typeof(Profilo));
             Routing.RegisterRoute("FriendshipPage", typeof(FriendshipPage));
             Routing.RegisterRoute("ChangeEmailPage", typeof(ChangeEmailPage));
             Routing.RegisterRoute("ChangePasswordPage", typeof(ChangePasswordPage));
-            
+
             // Eseguiamo la verifica del token
             CheckTokenAndNavigate();
         }

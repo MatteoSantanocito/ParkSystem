@@ -1,0 +1,26 @@
+[
+  {
+    "media_prenotazioni_giornaliere_mensile":0.13,
+    "top_3_attrazioni":{
+      "Casetta":25.0,
+      "Montagna Russa":25.0,
+      "Ruota Panoramica":25.0
+    },
+    "giorni_aperti_mese_corrente":1,
+    "distribuzione_oraria_percentuale":{
+      "2":75.0,
+      "11":25.0
+    },
+    "giorno_con_piu_prenotazioni":{
+      "data":"2025-05-07",
+      "numero_prenotazioni":4
+    },
+    "giorno_con_meno_prenotazioni":{
+      "data":"2025-05-07",
+      "numero_prenotazioni":4
+    },
+    "media_prenotazioni_per_utente":4.0,
+    "tipologia_piu_prenotata":"Thrill Ride",
+    "tipologia_meno_prenotata":"Thrill Ride"
+  }
+]

@@ -1,0 +1,56 @@
+[
+  {
+    "id_attrazione":1,
+    "nome":"Montagna Russa",
+    "percentuale_riempimento_oraria":0.0,
+    "percentuale_media_riempimento_giornaliera":0.2
+  },
+  {
+    "id_attrazione":3,
+    "nome":"Atlantide",
+    "percentuale_riempimento_oraria":0.0,
+    "percentuale_media_riempimento_giornaliera":0.0
+  },
+  {
+    "id_attrazione":4,
+    "nome":"Ruota Panoramica",
+    "percentuale_riempimento_oraria":0.0,
+    "percentuale_media_riempimento_giornaliera":0.5
+  },
+  {
+    "id_attrazione":5,
+    "nome":"Casa Stregata",
+    "percentuale_riempimento_oraria":0.0,
+    "percentuale_media_riempimento_giornaliera":0.0
+  },
+  {
+    "id_attrazione":6,
+    "nome":"Treno Fantasma",
+    "percentuale_riempimento_oraria":0.0,
+    "percentuale_media_riempimento_giornaliera":0.0
+  },
+  {
+    "id_attrazione":8,
+    "nome":"Canyon",
+    "percentuale_riempimento_oraria":0.0,
+    "percentuale_media_riempimento_giornaliera":0.0
+  },
+  {
+    "id_attrazione":9,
+    "nome":"Cinema 4D",
+    "percentuale_riempimento_oraria":0.0,
+    "percentuale_media_riempimento_giornaliera":0.0
+  },
+  {
+    "id_attrazione":10,
+    "nome":"Teatro",
+    "percentuale_riempimento_oraria":0.0,
+    "percentuale_media_riempimento_giornaliera":0.0
+  },
+  {
+    "id_attrazione":11,
+    "nome":"Casetta",
+    "percentuale_riempimento_oraria":0.0,
+    "percentuale_media_riempimento_giornaliera":1.0
+  }
+]
